@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { UsersModule } from './models/users/users.module';
 import { PrismaService } from './services/prisma/prisma.service';
+import { StudentsModule } from './students/students.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { PrismaService } from './services/prisma/prisma.service';
       sortSchema: true,
     }),
     UsersModule,
+    StudentsModule,
   ],
   providers: [PrismaService],
 })
