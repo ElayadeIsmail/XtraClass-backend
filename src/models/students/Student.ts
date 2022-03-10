@@ -1,33 +1,16 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { User } from '../users/User';
 
 @ObjectType()
 export class Student {
   @Field(() => Int)
   id: number;
 
-  @Field()
-  firstName: string;
-
-  @Field()
-  lastName: string;
-
-  @Field({ nullable: true })
-  photo?: string;
-
-  @Field({ nullable: true })
-  cin?: string;
-
-  @Field()
-  phone: string;
-
-  @Field()
-  address: string;
-
   @Field(() => Int)
   userId: number;
 
-  @Field(() => Date)
-  birthDate: Date;
+  @Field(() => User, { nullable: true })
+  user?: User;
 
   @Field(() => Date)
   createdAt: Date;

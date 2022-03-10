@@ -24,25 +24,27 @@ model User {
   password          String
   generatedPassword String
   isPasswordChanged Boolean   @default(false)
+  firstName         String
+  lastName          String
+  photo             String?   @default("images/avatar.png")
+  phone             String    @unique
+  address           String
+  cin               String?   @unique
+  birthDate         DateTime?
   role              Role
   updatedAt         DateTime  @updatedAt
   createdAt         DateTime  @default(now())
-  students          Student[]
-  parents           Parent[]
+  student           Student?
+  parent            Parent?
 
+
+  @@unique([firstName, lastName], name: "fullName")
   @@map("users")
 }
 
 model Student {
   id        Int      @id @default(autoincrement())
-  firstName String
-  lastName  String
-  photo     String   @default("images/avatar.png")
-  phone     String   @unique
-  address   String
-  cin       String?  @unique
-  birthDate DateTime
-  userId    Int
+  userId    Int      @unique
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   parentId  Int?
   parent    Parent?  @relation(fields: [parentId], references: [id], onDelete: Restrict)
@@ -54,14 +56,7 @@ model Student {
 
 model Parent {
   id         Int       @id @default(autoincrement())
-  firstName  String
-  lastName   String
-  photo      String    @default("images/avatar.png")
-  phone      String    @unique
-  address    String
-  cin        String?   @unique
-  birthDate  DateTime?
-  userId     Int
+  userId     Int       @unique
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   childrents Student[]
   createdAt  DateTime  @default(now())
