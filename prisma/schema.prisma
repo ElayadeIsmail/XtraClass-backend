@@ -10,8 +10,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  Student
+  Admin
+  Staff
+  Instructor
+  Parent
+}
+
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  passowed String
+  id                Int       @id @default(autoincrement())
+  username          String    @unique
+  password          String
+  generatedPassword String
+  isPasswordChanged Boolean   @default(false)
+  role              Role
+  updatedAt         DateTime  @updatedAt
+  createdAt         DateTime  @default(now())
+  students          Student[]
+  parents           Parent[]
+
+  @@map("users")
+}
+
+model Student {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  photo     String   @default("images/avatar.png")
+  phone     String   @unique
+  address   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentId  Int?
+  parent    Parent?  @relation(fields: [parentId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("students")
+}
+
+model Parent {
+  id         Int       @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  photo      String    @default("images/avatar.png")
+  phone      String    @unique
+  address    String
+  userId     Int
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  childrents Student[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("parents")
 }
