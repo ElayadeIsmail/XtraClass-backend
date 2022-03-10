@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  backend:
+    build: .
+    ports:
+      - '5000:5000'
+    command: ./wait-for-it.sh postgres:5432 -- ./docker-entrypoint.sh
+    depends_on:
+      - postgres
+    restart: on-failure
+    volumes:
+      - .:/app
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      - POSTGRES_DB=app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=MyPassword
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  pg-data:
