@@ -3,6 +3,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import 'reflect-metadata';
 import { AppModule } from './app.module';
 import { PrismaService } from './services/prisma/prisma.service';
 

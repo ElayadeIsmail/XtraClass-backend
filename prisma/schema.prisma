@@ -40,6 +40,8 @@ model Student {
   photo     String   @default("images/avatar.png")
   phone     String   @unique
   address   String
+  cin       String?  @unique
+  birthDate DateTime
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   parentId  Int?
@@ -57,6 +59,8 @@ model Parent {
   photo      String    @default("images/avatar.png")
   phone      String    @unique
   address    String
+  cin        String?   @unique
+  birthDate  DateTime?
   userId     Int
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   childrents Student[]
