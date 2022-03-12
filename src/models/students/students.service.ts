@@ -21,11 +21,16 @@ export class StudentsService {
         phone: userInput.phone,
       },
     });
-    const cinAlreadyExistPromise = this.prisma.user.findUnique({
-      where: {
-        cin: userInput.cin,
-      },
-    });
+    if (userInput.cin) {
+      const cinAlreadyExist = await this.prisma.user.findUnique({
+        where: {
+          cin: userInput?.cin,
+        },
+      });
+      if (cinAlreadyExist) {
+        throw new BadRequestException('CIN already exist');
+      }
+    }
     const fullNameAlreadyExistPromise = this.prisma.user.findUnique({
       where: {
         fullName: {
@@ -38,12 +43,11 @@ export class StudentsService {
     const checksResult = await Promise.all([
       nameAlreadyExistPromise,
       phoneAlreadyExistPromise,
-      cinAlreadyExistPromise,
       fullNameAlreadyExistPromise,
     ]);
-    const fields = ['username', 'phone', 'cin', 'firstName and lastName'];
+    const fields = ['username', 'phone', 'firstName and lastName'];
     checksResult.forEach((user, idx) => {
-      if (!user && !(idx == 2 && !userInput.cin)) {
+      if (user) {
         throw new BadRequestException(`${fields[idx]} Already exist`);
       }
     });
