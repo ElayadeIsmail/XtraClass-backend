@@ -73,6 +73,7 @@ model Grade {
   id      Int       @id @default(autoincrement())
   name    String    @unique
   student Student[]
+  levels  Level[]
 
   @@map("grades")
 }
@@ -80,7 +81,10 @@ model Grade {
 model Level {
   id      Int       @id @default(autoincrement())
   name    String    @unique
+  gradeId Int
+  grade   Grade     @relation(fields: [gradeId], references: [id])
   student Student[]
 
+  @@unique([name, gradeId])
   @@map("levels")
 }
