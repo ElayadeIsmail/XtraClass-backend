@@ -5,7 +5,6 @@ export const gradesData: Prisma.GradeCreateInput[] = [
     name: 'First',
     levels: {
       createMany: {
-        skipDuplicates: true,
         data: [
           {
             name: 'First',
@@ -33,7 +32,6 @@ export const gradesData: Prisma.GradeCreateInput[] = [
     name: 'Second',
     levels: {
       createMany: {
-        skipDuplicates: true,
         data: [
           {
             name: 'First',
@@ -52,7 +50,6 @@ export const gradesData: Prisma.GradeCreateInput[] = [
     name: 'third',
     levels: {
       createMany: {
-        skipDuplicates: true,
         data: [
           {
             name: 'First',

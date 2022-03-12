@@ -80,7 +80,7 @@ model Grade {
 
 model Level {
   id      Int       @id @default(autoincrement())
-  name    String    @unique
+  name    String
   gradeId Int
   grade   Grade     @relation(fields: [gradeId], references: [id])
   student Student[]

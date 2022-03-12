@@ -2,6 +2,55 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateStudentInputs {
+  address: String!
+  birthDate: DateTime!
+  cin: String
+  firstName: String!
+  gradeId: Int!
+  lastName: String!
+  levelId: Int!
+  phone: String!
+  photo: String
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createStudent(inputs: CreateStudentInputs!): Student!
+}
+
 type Query {
   hello: String!
+}
+
+type Student {
+  createdAt: DateTime!
+  gradeId: Int!
+  id: Int!
+  levelId: Int!
+  updatedAt: DateTime!
+  user: User
+  userId: Int!
+}
+
+type User {
+  address: String!
+  birthDate: DateTime!
+  cin: String
+  createdAt: DateTime!
+  firstName: String!
+  generatedPassword: String!
+  id: Int!
+  isPasswordChanged: Boolean!
+  lastName: String!
+  phone: String!
+  photo: String
+  role: String!
+  updatedAt: DateTime!
+  username: String!
 }

@@ -38,7 +38,7 @@ export class User {
   @Field(() => Date)
   birthDate: Date;
 
-  @Field(() => Role)
+  @Field()
   role: Role;
 
   @Field(() => Date)

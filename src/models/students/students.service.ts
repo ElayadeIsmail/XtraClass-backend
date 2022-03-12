@@ -62,6 +62,9 @@ export class StudentsService {
       const field = level ? 'grade' : 'level';
       throw new BadRequestException(`${field} does not found`);
     }
+    if (level.gradeId !== gradeId) {
+      throw new BadRequestException('Level must be for grad ');
+    }
     const generatedPassword = generatePassword();
     const hashedPassword = await PasswordManager.hash(generatedPassword);
     return this.prisma.student.create({

@@ -7,6 +7,12 @@ export class Student {
   id: number;
 
   @Field(() => Int)
+  levelId: number;
+
+  @Field(() => Int)
+  gradeId: number;
+
+  @Field(() => Int)
   userId: number;
 
   @Field(() => User, { nullable: true })
