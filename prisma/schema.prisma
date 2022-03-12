@@ -48,6 +48,10 @@ model Student {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   parentId  Int?
   parent    Parent?  @relation(fields: [parentId], references: [id], onDelete: Restrict)
+  gradeId   Int
+  grade     Grade    @relation(fields: [gradeId], references: [id], onDelete: Restrict)
+  levelId   Int
+  level     Level    @relation(fields: [levelId], references: [id], onDelete: Restrict)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -63,4 +67,20 @@ model Parent {
   updatedAt  DateTime  @updatedAt
 
   @@map("parents")
+}
+
+model Grade {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  student Student[]
+
+  @@map("grades")
+}
+
+model Level {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  student Student[]
+
+  @@map("levels")
 }

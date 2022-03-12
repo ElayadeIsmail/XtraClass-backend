@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
 export class CreateStudentInputs {
@@ -25,4 +25,10 @@ export class CreateStudentInputs {
 
   @Field({ nullable: true })
   cin?: string;
+
+  @Field(() => Int)
+  levelId: number;
+
+  @Field(() => Int)
+  gradeId: number;
 }

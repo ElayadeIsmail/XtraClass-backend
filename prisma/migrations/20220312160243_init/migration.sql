@@ -1,14 +1,5 @@
-/*
-  Warnings:
-
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-
-*/
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('Student', 'Admin', 'Staff', 'Instructor', 'Parent');
-
--- DropTable
-DROP TABLE "User";
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -17,6 +8,13 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "generatedPassword" TEXT NOT NULL,
     "isPasswordChanged" BOOLEAN NOT NULL DEFAULT false,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "photo" TEXT DEFAULT E'images/avatar.png',
+    "phone" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "cin" TEXT,
+    "birthDate" TIMESTAMP(3),
     "role" "Role" NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -27,11 +25,6 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "students" (
     "id" SERIAL NOT NULL,
-    "firstName" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
-    "photo" TEXT NOT NULL DEFAULT E'images/avatar.png',
-    "phone" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
     "parentId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -43,11 +36,6 @@ CREATE TABLE "students" (
 -- CreateTable
 CREATE TABLE "parents" (
     "id" SERIAL NOT NULL,
-    "firstName" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
-    "photo" TEXT NOT NULL DEFAULT E'images/avatar.png',
-    "phone" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -59,10 +47,19 @@ CREATE TABLE "parents" (
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "students_phone_key" ON "students"("phone");
+CREATE UNIQUE INDEX "users_phone_key" ON "users"("phone");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "parents_phone_key" ON "parents"("phone");
+CREATE UNIQUE INDEX "users_cin_key" ON "users"("cin");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_firstName_lastName_key" ON "users"("firstName", "lastName");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "students_userId_key" ON "students"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "parents_userId_key" ON "parents"("userId");
 
 -- AddForeignKey
 ALTER TABLE "students" ADD CONSTRAINT "students_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
