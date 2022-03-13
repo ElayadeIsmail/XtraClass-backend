@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { GradesModule } from './models/grades/grades.module';
+import { ParentsModule } from './models/parents/parents.module';
 import { StudentsModule } from './models/students/students.module';
 import { UsersModule } from './models/users/users.module';
 import { PrismaService } from './services/prisma/prisma.service';
@@ -17,6 +18,7 @@ import { PrismaService } from './services/prisma/prisma.service';
     UsersModule,
     StudentsModule,
     GradesModule,
+    ParentsModule,
   ],
   providers: [PrismaService],
 })

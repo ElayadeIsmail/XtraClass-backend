@@ -59,12 +59,12 @@ model Student {
 }
 
 model Parent {
-  id         Int       @id @default(autoincrement())
-  userId     Int       @unique
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  childrents Student[]
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  students  Student[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@map("parents")
 }
