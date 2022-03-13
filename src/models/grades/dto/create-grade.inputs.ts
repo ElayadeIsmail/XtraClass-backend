@@ -11,5 +11,6 @@ export class CreateGradeInputs {
 
 @InputType()
 export class GradeLevelsInput {
+  @Field()
   name: string;
 }

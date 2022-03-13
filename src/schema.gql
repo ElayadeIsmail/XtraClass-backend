@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateGradeInputs {
+  levels: [GradeLevelsInput!]!
+  name: String!
+}
+
 input CreateStudentInputs {
   address: String!
   birthDate: DateTime!
@@ -20,7 +25,25 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Grade {
+  id: Int!
+  levels: [Level!]
+  name: String!
+}
+
+input GradeLevelsInput {
+  name: String!
+}
+
+type Level {
+  grade: Grade
+  gradeId: Int!
+  id: Int!
+  name: String!
+}
+
 type Mutation {
+  createGrade(inputs: CreateGradeInputs!): Grade!
   createStudent(inputs: CreateStudentInputs!): Student!
 }
 
