@@ -72,6 +72,9 @@ export class StudentsService {
     const generatedPassword = generatePassword();
     const hashedPassword = await PasswordManager.hash(generatedPassword);
     return this.prisma.student.create({
+      include: {
+        user: true,
+      },
       data: {
         level: {
           connect: {
