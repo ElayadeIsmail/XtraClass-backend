@@ -13,6 +13,6 @@ export class Parent {
   @Field(() => User, { nullable: true })
   user?: User;
 
-  @Field(() => [Student])
-  students: Student[];
+  @Field(() => [Student], { nullable: true })
+  students?: Student[];
 }
