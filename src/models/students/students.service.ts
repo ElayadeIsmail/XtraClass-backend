@@ -3,6 +3,7 @@ import { Role, Student } from '@prisma/client';
 import { generatePassword } from 'src/helpers/generate-password';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
+import { AddStudentCourse } from './dto/add-student-course';
 import { CreateStudentInputs } from './dto/create-student.inputs';
 
 @Injectable()
@@ -94,6 +95,34 @@ export class StudentsService {
             role: Role.Student,
           },
         },
+      },
+    });
+  }
+  async addStudentCourse(inputs: AddStudentCourse) {
+    const { courseId, studentId, price } = inputs;
+    const studentPromise = this.prisma.student.findUnique({
+      where: {
+        id: studentId,
+      },
+    });
+    const coursePromise = this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+    const [student, course] = await Promise.all([
+      studentPromise,
+      coursePromise,
+    ]);
+    if (!student || course) {
+      const field = !student ? 'Student' : 'Course';
+      throw new BadRequestException(`${field} does not exist`);
+    }
+    return this.prisma.studentCourse.create({
+      data: {
+        studentId,
+        courseId,
+        price: price ? price : course.price,
       },
     });
   }

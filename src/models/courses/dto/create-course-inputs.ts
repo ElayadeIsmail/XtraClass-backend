@@ -1,10 +1,10 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, Float, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
 export class CreateCourseInput {
   @Field()
   name: string;
-  @Field(() => Int)
+  @Field(() => Float)
   price: number;
   @Field(() => Int)
   gradeId: number;
