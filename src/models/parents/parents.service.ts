@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
-import { generatePassword } from 'src/helpers/generate-password';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { CreateParentInput } from './dtos/create-parent.inputs';
@@ -60,7 +59,7 @@ export class ParentsService {
       }
     });
 
-    const generatedPassword = generatePassword();
+    const generatedPassword = PasswordManager.generatePassword();
     const hashedPassword = await PasswordManager.hash(generatedPassword);
     return this.prisma.parent.create({
       data: {

@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Role, Student } from '@prisma/client';
-import { generatePassword } from 'src/helpers/generate-password';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { AddStudentCourse } from './dto/add-student-course';
@@ -70,7 +69,7 @@ export class StudentsService {
     if (level.gradeId !== gradeId) {
       throw new BadRequestException('Level must be for grad ');
     }
-    const generatedPassword = generatePassword();
+    const generatedPassword = PasswordManager.generatePassword();
     const hashedPassword = await PasswordManager.hash(generatedPassword);
     return this.prisma.student.create({
       include: {
