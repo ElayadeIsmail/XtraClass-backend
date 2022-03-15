@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
+import { CoursesModule } from './models/courses/courses.module';
 import { GradesModule } from './models/grades/grades.module';
 import { ParentsModule } from './models/parents/parents.module';
 import { StudentsModule } from './models/students/students.module';
@@ -19,6 +20,7 @@ import { PrismaService } from './services/prisma/prisma.service';
     StudentsModule,
     GradesModule,
     ParentsModule,
+    CoursesModule,
   ],
   providers: [PrismaService],
 })

@@ -55,6 +55,7 @@ model Student {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  StudentCourse StudentCourse[]
   @@map("students")
 }
 
@@ -74,6 +75,7 @@ model Grade {
   name     String    @unique
   students Student[]
   levels   Level[]
+  courses  Course[]
 
   @@map("grades")
 }
@@ -84,7 +86,50 @@ model Level {
   gradeId  Int
   grade    Grade     @relation(fields: [gradeId], references: [id])
   students Student[]
+  courses  Course[]
 
   @@unique([name, gradeId])
   @@map("levels")
+}
+
+model Specialization {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  courses Course[]
+
+  @@map("specializations")
+}
+
+model Subject {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  courses Course[]
+
+  @@map("subjects")
+}
+
+model Course {
+  id               Int             @id @default(autoincrement())
+  name             String
+  price            Float
+  gradeId          Int
+  grade            Grade           @relation(fields: [gradeId], references: [id])
+  levelId          Int
+  level            Level           @relation(fields: [levelId], references: [id])
+  specializationId Int
+  specialization   Specialization  @relation(fields: [specializationId], references: [id])
+  subjectId        Int
+  subject          Subject         @relation(fields: [subjectId], references: [id])
+  StudentCourse    StudentCourse[]
+}
+
+model StudentCourse {
+  id        Int     @id @default(autoincrement())
+  studentId Int
+  student   Student @relation(fields: [studentId], references: [id])
+  courseId  Int
+  course    Course  @relation(fields: [courseId], references: [id])
+  price     Float
+
+  @@unique([studentId, courseId])
 }
