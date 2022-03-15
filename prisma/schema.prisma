@@ -56,6 +56,7 @@ model Student {
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
   courses   StudentCourse[]
+  groups    Group[]
 
   @@map("students")
 }
@@ -124,6 +125,7 @@ model Course {
   students         StudentCourse[]
   instructors      InstructorCourse[]
 
+  Group Group[]
   @@map("courses")
 }
 
@@ -145,6 +147,7 @@ model Instructor {
   user    User               @relation(fields: [userId], references: [id])
   courses InstructorCourse[]
 
+  Group Group[]
   @@map("instructors")
 }
 
@@ -159,4 +162,14 @@ model InstructorCourse {
 
   @@unique([instructorId, courseId])
   @@map("intructor_course")
+}
+
+model Group {
+  id           Int        @id @default(autoincrement())
+  name         String
+  courseId     Int
+  course       Course     @relation(fields: [courseId], references: [id])
+  instructorId Int
+  instructor   Instructor @relation(fields: [instructorId], references: [id])
+  students     Student[]
 }
