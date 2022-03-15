@@ -110,33 +110,53 @@ model Subject {
 }
 
 model Course {
-  id               Int             @id @default(autoincrement())
+  id               Int                @id @default(autoincrement())
   name             String
   price            Float
   gradeId          Int
-  grade            Grade           @relation(fields: [gradeId], references: [id])
+  grade            Grade              @relation(fields: [gradeId], references: [id])
   levelId          Int
-  level            Level           @relation(fields: [levelId], references: [id])
+  level            Level              @relation(fields: [levelId], references: [id])
   specializationId Int
-  specialization   Specialization  @relation(fields: [specializationId], references: [id])
+  specialization   Specialization     @relation(fields: [specializationId], references: [id])
   subjectId        Int
-  subject          Subject         @relation(fields: [subjectId], references: [id])
+  subject          Subject            @relation(fields: [subjectId], references: [id])
   students         StudentCourse[]
+  instructors      InstructorCourse[]
+
+  @@map("courses")
 }
 
 model StudentCourse {
   id        Int     @id @default(autoincrement())
   studentId Int
-  student   Student @relation(fields: [studentId], references: [id])
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
   courseId  Int
   course    Course  @relation(fields: [courseId], references: [id])
   price     Float
 
   @@unique([studentId, courseId])
+  @@map("student_course")
 }
 
 model Instructor {
-  id     Int  @id @default(autoincrement())
-  userId Int  @unique
-  user   User @relation(fields: [userId], references: [id])
+  id      Int                @id @default(autoincrement())
+  userId  Int                @unique
+  user    User               @relation(fields: [userId], references: [id])
+  courses InstructorCourse[]
+
+  @@map("instructors")
+}
+
+model InstructorCourse {
+  id           Int        @id @default(autoincrement())
+  instructorId Int
+  instructor   Instructor @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  courseId     Int
+  course       Course     @relation(fields: [courseId], references: [id])
+  percentage   Float
+
+
+  @@unique([instructorId, courseId])
+  @@map("intructor_course")
 }

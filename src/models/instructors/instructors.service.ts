@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
+import { AddInstructorCourse } from './dtos/add-instructor-course-input';
 import { CreateInstructorInputs } from './dtos/create-instructor-inputs';
 
 @Injectable()
@@ -64,6 +65,46 @@ export class InstructorsService {
             role: Role.Instructor,
           },
         },
+      },
+    });
+  }
+
+  async addInstructorCourse(inputs: AddInstructorCourse) {
+    const { courseId, instructorId, percentage } = inputs;
+    const coursePromise = this.prisma.course.findUnique({
+      where: { id: courseId },
+    });
+    const instructorPromise = this.prisma.instructor.findUnique({
+      where: {
+        id: instructorId,
+      },
+    });
+    const instructorCourseAlreadyExistPromise =
+      this.prisma.instructorCourse.findUnique({
+        where: {
+          instructorId_courseId: {
+            courseId,
+            instructorId,
+          },
+        },
+      });
+    const [course, instructor, instructorCourse] = await Promise.all([
+      coursePromise,
+      instructorPromise,
+      instructorCourseAlreadyExistPromise,
+    ]);
+    if (!course || !instructor) {
+      const field = !course ? 'Course' : 'Instructor';
+      throw new BadRequestException(`${field} does not exist`);
+    }
+    if (instructorCourse) {
+      throw new BadRequestException('Instructor already has this course');
+    }
+    return this.prisma.instructorCourse.create({
+      data: {
+        percentage,
+        courseId,
+        instructorId,
       },
     });
   }
