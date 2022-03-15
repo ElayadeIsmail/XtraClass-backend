@@ -114,9 +114,14 @@ export class StudentsService {
       studentPromise,
       coursePromise,
     ]);
-    if (!student || course) {
+    if (!student || !course) {
       const field = !student ? 'Student' : 'Course';
       throw new BadRequestException(`${field} does not exist`);
+    }
+    if (student.levelId !== course.levelId) {
+      throw new BadRequestException(
+        'Student level and course level does not match',
+      );
     }
     return this.prisma.studentCourse.create({
       data: {

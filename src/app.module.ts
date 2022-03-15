@@ -8,6 +8,7 @@ import { ParentsModule } from './models/parents/parents.module';
 import { StudentsModule } from './models/students/students.module';
 import { UsersModule } from './models/users/users.module';
 import { PrismaService } from './services/prisma/prisma.service';
+import { InstructorsModule } from './instructors/instructors.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { PrismaService } from './services/prisma/prisma.service';
     GradesModule,
     ParentsModule,
     CoursesModule,
+    InstructorsModule,
   ],
   providers: [PrismaService],
 })

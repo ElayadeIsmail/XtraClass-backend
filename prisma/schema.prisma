@@ -19,23 +19,24 @@ enum Role {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  username          String    @unique
+  id                Int         @id @default(autoincrement())
+  username          String      @unique
   password          String
   generatedPassword String
-  isPasswordChanged Boolean   @default(false)
+  isPasswordChanged Boolean     @default(false)
   firstName         String
   lastName          String
-  photo             String?   @default("images/avatar.png")
-  phone             String    @unique
+  photo             String?     @default("images/avatar.png")
+  phone             String      @unique
   address           String
-  cin               String?   @unique
+  cin               String?     @unique
   birthDate         DateTime?
   role              Role
-  updatedAt         DateTime  @updatedAt
-  createdAt         DateTime  @default(now())
   student           Student?
   parent            Parent?
+  instructor        Instructor?
+  updatedAt         DateTime    @updatedAt
+  createdAt         DateTime    @default(now())
 
 
   @@unique([firstName, lastName], name: "fullName")
@@ -43,26 +44,26 @@ model User {
 }
 
 model Student {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        Int             @id @default(autoincrement())
+  userId    Int             @unique
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   parentId  Int?
-  parent    Parent?  @relation(fields: [parentId], references: [id], onDelete: Restrict)
+  parent    Parent?         @relation(fields: [parentId], references: [id], onDelete: Restrict)
   gradeId   Int
-  grade     Grade    @relation(fields: [gradeId], references: [id], onDelete: NoAction)
+  grade     Grade           @relation(fields: [gradeId], references: [id], onDelete: Restrict)
   levelId   Int
-  level     Level    @relation(fields: [levelId], references: [id], onDelete: NoAction)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  level     Level           @relation(fields: [levelId], references: [id], onDelete: Restrict)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  courses   StudentCourse[]
 
-  StudentCourse StudentCourse[]
   @@map("students")
 }
 
 model Parent {
   id        Int       @id @default(autoincrement())
   userId    Int       @unique
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Restrict)
   students  Student[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -120,7 +121,7 @@ model Course {
   specialization   Specialization  @relation(fields: [specializationId], references: [id])
   subjectId        Int
   subject          Subject         @relation(fields: [subjectId], references: [id])
-  StudentCourse    StudentCourse[]
+  students         StudentCourse[]
 }
 
 model StudentCourse {
@@ -132,4 +133,10 @@ model StudentCourse {
   price     Float
 
   @@unique([studentId, courseId])
+}
+
+model Instructor {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
 }
