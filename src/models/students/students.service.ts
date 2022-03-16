@@ -3,7 +3,7 @@ import { Role, Student } from '@prisma/client';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { AddStudentCourse } from './dto/add-student-course';
-import { addStudentToGroup } from './dto/add-student-group';
+import { addStudentsToGroup, addStudentToGroup } from './dto/add-student-group';
 import { CreateStudentInputs } from './dto/create-student.inputs';
 
 @Injectable()
@@ -180,6 +180,66 @@ export class StudentsService {
           connect: {
             id: groupId,
           },
+        },
+      },
+    });
+  }
+  async addStudentsToGroup({ groupId, studentsIds }: addStudentsToGroup) {
+    const group = await this.prisma.group.findUnique({
+      where: { id: groupId },
+    });
+    if (!group) {
+      throw new BadRequestException('Course Does Not Exist');
+    }
+    const students = await this.prisma.student.findMany({
+      where: {
+        id: { in: studentsIds },
+        courses: {
+          some: {
+            id: group.courseId,
+          },
+        },
+        groups: {
+          none: {
+            courseId: group.courseId,
+          },
+        },
+      },
+    });
+    const existingIds = students.map((student) => student.id);
+    if (students.length !== studentsIds.length) {
+      // ! some student failed the check
+      const invalidIds = studentsIds.filter((id) => !existingIds.includes(id));
+      const student = await this.prisma.student.findUnique({
+        where: {
+          id: invalidIds[0],
+        },
+        select: {
+          user: {
+            select: { firstName: true, lastName: true },
+          },
+        },
+      });
+      if (!student) {
+        throw new BadRequestException(
+          `Student does not exist with id ${invalidIds[0]}`,
+        );
+      }
+      // ! Consider changing message to be more specific
+      throw new BadRequestException(
+        `${student.user.firstName} ${student.user.firstName}
+         does not have access the course
+          of this group or already has access 
+          to another group`,
+      );
+    }
+    return this.prisma.group.update({
+      where: {
+        id: groupId,
+      },
+      data: {
+        students: {
+          connect: existingIds.map((id) => ({ id })),
         },
       },
     });
