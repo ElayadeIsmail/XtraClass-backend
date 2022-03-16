@@ -172,4 +172,6 @@ model Group {
   instructorId Int
   instructor   Instructor @relation(fields: [instructorId], references: [id])
   students     Student[]
+
+  @@map("groups")
 }
