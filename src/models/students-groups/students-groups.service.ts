@@ -218,7 +218,7 @@ export class StudentsGroupsService {
       where: {
         id: oldGroupId,
       },
-      select: {
+      include: {
         students: {
           where: {
             id: {
@@ -236,7 +236,67 @@ export class StudentsGroupsService {
     const [students, oldGroup, newGroup] = await Promise.all([
       studentsPromise,
       oldGroupPromise,
-      oldGroupPromise,
+      newGroupPromise,
+    ]);
+    if (!oldGroup || !newGroup) {
+      const field = !oldGroup ? 'Old Group' : 'New Group';
+      throw new BadRequestException(`${field} does not exist`);
+    }
+    if (oldGroup.courseId !== newGroup.courseId) {
+      throw new BadRequestException('new group and old course ');
+    }
+    const existingStudentsIds = students.map((student) => student.id);
+    if (existingStudentsIds.length !== studentsIds.length) {
+      const invalidStudentsIds = studentsIds.filter(
+        (id) => !existingStudentsIds.includes(id),
+      );
+      let idsString = '';
+      for (const id of invalidStudentsIds) {
+        idsString += id + ' ';
+      }
+      throw new BadRequestException(`${idsString} does not exist`);
+    }
+    if (oldGroup.students.length !== studentsIds.length) {
+      const oldGroupStudentsIds = oldGroup.students.map(
+        (student) => student.id,
+      );
+      const studentsIdsNotInOldGroup = studentsIds.filter(
+        (id) => !oldGroupStudentsIds.includes(id),
+      );
+      const studentsNotInGroup = students.filter((student) =>
+        studentsIdsNotInOldGroup.includes(student.id),
+      );
+      let names = '';
+      for (const student of studentsNotInGroup) {
+        names += student.user.lastName + ',';
+      }
+      throw new BadRequestException(
+        `${names} does not exist on the old course`,
+      );
+    }
+    const updateOldGroupStudentsPromise = this.prisma.group.update({
+      where: {
+        id: oldGroupId,
+      },
+      data: {
+        students: {
+          disconnect: studentsIds.map((id) => ({ id })),
+        },
+      },
+    });
+    const updateNewGroupStudentsPromise = this.prisma.group.update({
+      where: {
+        id: newGroupId,
+      },
+      data: {
+        students: {
+          connect: studentsIds.map((id) => ({ id })),
+        },
+      },
+    });
+    return this.prisma.$transaction([
+      updateOldGroupStudentsPromise,
+      updateNewGroupStudentsPromise,
     ]);
   }
 }
