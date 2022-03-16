@@ -8,6 +8,7 @@ import {
   changeStudentGroup,
   changeStudentsGroup,
 } from './dtos/change-student-group-input';
+import { RemoveStudentFromGroupInputs } from './dtos/remove-students-group-inputs';
 
 @Injectable()
 export class StudentsGroupsService {
@@ -298,5 +299,41 @@ export class StudentsGroupsService {
       updateOldGroupStudentsPromise,
       updateNewGroupStudentsPromise,
     ]);
+  }
+
+  async removeStudentFromGroup({
+    groupId,
+    studentId,
+  }: RemoveStudentFromGroupInputs) {
+    const student = await this.prisma.student.findUnique({
+      where: {
+        id: studentId,
+      },
+      include: {
+        groups: {
+          where: {
+            id: groupId,
+          },
+        },
+      },
+    });
+    if (!student) {
+      throw new BadRequestException('Student does not exist');
+    }
+    if (student.groups.length === 0) {
+      throw new BadRequestException('Student does not exist in this group');
+    }
+    return this.prisma.student.update({
+      where: {
+        id: studentId,
+      },
+      data: {
+        groups: {
+          disconnect: {
+            id: groupId,
+          },
+        },
+      },
+    });
   }
 }
