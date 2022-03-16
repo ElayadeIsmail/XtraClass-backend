@@ -3,6 +3,7 @@ import { Role, Student } from '@prisma/client';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { AddStudentCourse } from './dto/add-student-course';
+import { addStudentToGroup } from './dto/add-student-group';
 import { CreateStudentInputs } from './dto/create-student.inputs';
 
 @Injectable()
@@ -127,6 +128,59 @@ export class StudentsService {
         studentId,
         courseId,
         price: price ? price : course.price,
+      },
+    });
+  }
+  async addStudentToGroup({ groupId, studentId }: addStudentToGroup) {
+    const group = await this.prisma.group.findUnique({
+      where: { id: groupId },
+    });
+    if (!group) {
+      throw new BadRequestException('Course Does Not Exist');
+    }
+    const student = await this.prisma.student.findUnique({
+      where: {
+        id: studentId,
+      },
+      include: {
+        groups: {
+          where: {
+            courseId: group.courseId,
+          },
+        },
+        courses: {
+          where: {
+            id: group.courseId,
+          },
+        },
+      },
+    });
+    // ! check if student does not exist
+    if (!student) {
+      throw new BadRequestException('Student does not exist');
+    }
+    // ! check if student has access to this course
+    if (student.courses.length === 0) {
+      throw new BadRequestException(
+        'Student does not have access to this course',
+      );
+    }
+    // ! check if student already joined a group for this course
+    if (student.groups.length > 0) {
+      throw new BadRequestException(
+        'Student already in a group for this course',
+      );
+    }
+    return this.prisma.student.update({
+      where: {
+        id: studentId,
+      },
+      data: {
+        groups: {
+          connect: {
+            id: groupId,
+          },
+        },
       },
     });
   }
