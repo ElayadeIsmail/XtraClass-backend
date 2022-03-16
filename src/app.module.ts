@@ -10,6 +10,7 @@ import { ParentsModule } from './models/parents/parents.module';
 import { StudentsModule } from './models/students/students.module';
 import { UsersModule } from './models/users/users.module';
 import { PrismaService } from './services/prisma/prisma.service';
+import { StudentsGroupsModule } from './students-groups/students-groups.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PrismaService } from './services/prisma/prisma.service';
     CoursesModule,
     InstructorsModule,
     GroupsModule,
+    StudentsGroupsModule,
   ],
   providers: [PrismaService],
 })
