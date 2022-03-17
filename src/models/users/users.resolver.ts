@@ -1,5 +1,5 @@
 import { Query, Resolver } from '@nestjs/graphql';
-import { generatePassword } from '../../helpers/generate-password';
+import { PasswordManager } from 'src/services/password.service';
 import { UsersService } from './users.service';
 @Resolver()
 export class UsersResolver {
@@ -7,6 +7,6 @@ export class UsersResolver {
 
   @Query(() => String)
   hello() {
-    return generatePassword();
+    return PasswordManager.generatePassword();
   }
 }
