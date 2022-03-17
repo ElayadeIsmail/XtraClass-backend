@@ -5,6 +5,7 @@ import { join } from 'path';
 import { CoursesModule } from './models/courses/courses.module';
 import { GradesModule } from './models/grades/grades.module';
 import { GroupsModule } from './models/groups/groups.module';
+import { InstructorGroupsModule } from './models/instructor-groups/instructor-groups.module';
 import { InstructorsModule } from './models/instructors/instructors.module';
 import { ParentsModule } from './models/parents/parents.module';
 import { StudentsCoursesModule } from './models/students-courses/students-courses.module';
@@ -29,6 +30,7 @@ import { PrismaService } from './services/prisma/prisma.service';
     GroupsModule,
     StudentsGroupsModule,
     StudentsCoursesModule,
+    InstructorGroupsModule,
   ],
   providers: [PrismaService],
 })

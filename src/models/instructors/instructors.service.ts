@@ -73,7 +73,7 @@ export class InstructorsService {
     });
   }
 
-  async addInstructorCourse(inputs: AddInstructorCourse) {
+  async addInstructorToCourse(inputs: AddInstructorCourse) {
     const { courseId, instructorId, percentage } = inputs;
     const coursePromise = this.prisma.course.findUnique({
       where: { id: courseId },
@@ -113,7 +113,7 @@ export class InstructorsService {
     });
   }
 
-  async updateInstructorCourse({
+  async updateInstructorCoursePercentage({
     percentage,
     instructorCourseId,
   }: {
