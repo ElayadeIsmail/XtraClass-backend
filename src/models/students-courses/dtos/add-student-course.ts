@@ -1,7 +1,7 @@
 import { Field, Float, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
 
-export class AddStudentCourse {
+export class AddStudentToCourse {
   @Field(() => Int)
   studentId: number;
   @Field(() => Int)
