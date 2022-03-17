@@ -8,7 +8,10 @@ import {
   changeStudentGroup,
   changeStudentsGroup,
 } from './dtos/change-student-group-input';
-import { RemoveStudentFromGroupInputs } from './dtos/remove-students-group-inputs';
+import {
+  RemoveStudentFromGroupInputs,
+  RemoveStudentsFromGroupInputs,
+} from './dtos/remove-students-group-inputs';
 
 @Injectable()
 export class StudentsGroupsService {
@@ -332,6 +335,30 @@ export class StudentsGroupsService {
           disconnect: {
             id: groupId,
           },
+        },
+      },
+    });
+  }
+
+  async removeStudentsFromGroup({
+    studentsId,
+    groupId,
+  }: RemoveStudentsFromGroupInputs) {
+    const group = await this.prisma.group.findUnique({
+      where: {
+        id: groupId,
+      },
+    });
+    if (!group) {
+      throw new BadRequestException('group does not exist');
+    }
+    return this.prisma.group.update({
+      where: {
+        id: groupId,
+      },
+      data: {
+        students: {
+          disconnect: studentsId.map((id) => ({ id })),
         },
       },
     });

@@ -10,8 +10,8 @@ export class RemoveStudentFromGroupInputs {
 
 @InputType()
 export class RemoveStudentsFromGroupInputs {
-  @Field(() => Int)
-  studentId: number;
+  @Field(() => [Int])
+  studentsId: number[];
   @Field(() => Int)
   groupId: number;
 }
