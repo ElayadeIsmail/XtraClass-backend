@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { AddStudentToCourse } from './dtos/add-student-course';
 
@@ -74,6 +78,71 @@ export class StudentsCoursesService {
     const [studentCourse] = await this.prisma.$transaction([
       createStudentCoursePromise,
       updateStudentGroupsPromise,
+    ]);
+    return studentCourse;
+  }
+  async updateStudentCourse({
+    price,
+    studentCourseId,
+  }: {
+    price: number;
+    studentCourseId: number;
+  }) {
+    const studentCourse = await this.prisma.studentCourse.findUnique({
+      where: {
+        id: studentCourseId,
+      },
+    });
+    if (!studentCourse) {
+      throw new BadRequestException('Student course does not exist');
+    }
+    return this.prisma.studentCourse.update({
+      where: {
+        id: studentCourseId,
+      },
+      data: {
+        price,
+      },
+    });
+  }
+  async removeStudentCourse({ studentCourseId }: { studentCourseId: number }) {
+    const studentCourse = await this.prisma.studentCourse.findUnique({
+      where: { id: studentCourseId },
+    });
+    if (!studentCourse) {
+      throw new NotFoundException();
+    }
+    const student = await this.prisma.student.findUnique({
+      where: {
+        id: studentCourse.studentId,
+      },
+      include: {
+        groups: {
+          where: {
+            courseId: studentCourse.courseId,
+          },
+        },
+      },
+    });
+    const groupId = student.groups[0].id;
+    const removeStudentCoursePromise = this.prisma.studentCourse.delete({
+      where: { id: studentCourseId },
+    });
+    const removeStudentFromGroupPromise = this.prisma.student.update({
+      where: {
+        id: studentCourse.studentId,
+      },
+      data: {
+        groups: {
+          disconnect: {
+            id: groupId,
+          },
+        },
+      },
+    });
+    await this.prisma.$transaction([
+      removeStudentCoursePromise,
+      removeStudentFromGroupPromise,
     ]);
     return studentCourse;
   }
