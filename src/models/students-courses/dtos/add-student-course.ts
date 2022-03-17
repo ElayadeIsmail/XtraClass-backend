@@ -6,6 +6,8 @@ export class AddStudentToCourse {
   studentId: number;
   @Field(() => Int)
   courseId: number;
+  @Field(() => Int)
+  groupId: number;
   @Min(0)
   @Field(() => Float, { nullable: true })
   price?: number;

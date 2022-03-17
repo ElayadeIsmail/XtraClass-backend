@@ -124,8 +124,8 @@ model Course {
   subject          Subject            @relation(fields: [subjectId], references: [id])
   students         StudentCourse[]
   instructors      InstructorCourse[]
+  groups           Group[]
 
-  Group Group[]
   @@map("courses")
 }
 
