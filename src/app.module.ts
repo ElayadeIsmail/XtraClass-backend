@@ -7,10 +7,11 @@ import { GradesModule } from './models/grades/grades.module';
 import { GroupsModule } from './models/groups/groups.module';
 import { InstructorsModule } from './models/instructors/instructors.module';
 import { ParentsModule } from './models/parents/parents.module';
+import { StudentsCoursesModule } from './models/students-courses/students-courses.module';
+import { StudentsGroupsModule } from './models/students-groups/students-groups.module';
 import { StudentsModule } from './models/students/students.module';
 import { UsersModule } from './models/users/users.module';
 import { PrismaService } from './services/prisma/prisma.service';
-import { StudentsGroupsModule } from './students-groups/students-groups.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { StudentsGroupsModule } from './students-groups/students-groups.module';
     InstructorsModule,
     GroupsModule,
     StudentsGroupsModule,
+    StudentsCoursesModule,
   ],
   providers: [PrismaService],
 })
