@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
@@ -131,6 +135,31 @@ export class InstructorsService {
       data: {
         percentage,
       },
+    });
+  }
+  async removeInstructorFromCourse({
+    instructorCourseId,
+  }: {
+    instructorCourseId: number;
+  }) {
+    const instructorCourse = await this.prisma.instructorCourse.findUnique({
+      where: { id: instructorCourseId },
+    });
+    if (!instructorCourse) {
+      throw new NotFoundException();
+    }
+    const group = await this.prisma.group.findFirst({
+      where: {
+        instructorId: instructorCourse.instructorId,
+      },
+    });
+    if (group) {
+      throw new BadRequestException(
+        'Cannot remove instructor course because this instructor still liked with a group for this course',
+      );
+    }
+    return this.prisma.instructorCourse.delete({
+      where: { id: instructorCourseId },
     });
   }
 }
