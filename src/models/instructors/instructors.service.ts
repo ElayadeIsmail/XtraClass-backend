@@ -108,4 +108,29 @@ export class InstructorsService {
       },
     });
   }
+
+  async updateInstructorCourse({
+    percentage,
+    instructorCourseId,
+  }: {
+    percentage: number;
+    instructorCourseId: number;
+  }) {
+    const instructorCourse = await this.prisma.instructorCourse.findUnique({
+      where: {
+        id: instructorCourseId,
+      },
+    });
+    if (!instructorCourse) {
+      throw new BadRequestException('Student course does not exist');
+    }
+    return this.prisma.instructorCourse.update({
+      where: {
+        id: instructorCourseId,
+      },
+      data: {
+        percentage,
+      },
+    });
+  }
 }
