@@ -1,4 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Grade } from '../grades/Grade';
+import { Level } from '../grades/Level';
 
 @ObjectType()
 export class Course {
@@ -12,6 +14,10 @@ export class Course {
   gradeId: number;
   @Field(() => Int)
   levelId: number;
+  @Field(() => Grade, { nullable: true })
+  grade?: Grade;
+  @Field(() => Level, { nullable: true })
+  level?: Level;
   @Field(() => Int)
   specializationId: number;
   @Field(() => Int)

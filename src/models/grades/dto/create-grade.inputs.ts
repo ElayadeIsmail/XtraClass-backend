@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 
 @InputType()
 export class CreateGradeInputs {
@@ -10,7 +10,33 @@ export class CreateGradeInputs {
 }
 
 @InputType()
+export class UpdateGradeInputs {
+  @Field()
+  name: string;
+
+  @Field(() => Int)
+  gradeId: number;
+}
+
+@InputType()
 export class GradeLevelsInput {
   @Field()
   name: string;
+}
+
+@InputType()
+export class CreateLevelInput {
+  @Field()
+  name: string;
+
+  @Field(() => Int)
+  gradeId: number;
+}
+@InputType()
+export class updateLevelInput {
+  @Field()
+  name: string;
+
+  @Field(() => Int)
+  gradeId: number;
 }
