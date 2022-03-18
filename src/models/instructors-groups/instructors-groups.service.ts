@@ -39,7 +39,7 @@ export class InstructorsGroupsService {
     }
     if (instructor.courses.length === 0) {
       throw new BadRequestException(
-        'Instructor does not have access to the course for this groyp',
+        'Instructor does not have access to the course for this group',
       );
     }
     return this.prisma.group.update({
