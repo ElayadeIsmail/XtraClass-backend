@@ -11,7 +11,7 @@ export class CoursesResolver {
   course(@Args('id', { type: () => Int }) id: number): Promise<Course> {
     return this.coursesService.findOne(id);
   }
-  @Query(() => Course)
+  @Query(() => [Course])
   courses(): Promise<Course[]> {
     return this.coursesService.find();
   }

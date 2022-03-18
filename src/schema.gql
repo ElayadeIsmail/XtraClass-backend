@@ -17,7 +17,9 @@ type Course {
   levelId: Int!
   name: String!
   price: Float!
+  specialization: Specialization
   specializationId: Int!
+  subject: Subject
   subjectId: Int!
 }
 
@@ -80,8 +82,13 @@ type Mutation {
 
 type Query {
   course(id: Int!): Course!
-  courses: Course!
+  courses: [Course!]!
   hello: String!
+}
+
+type Specialization {
+  id: Int!
+  number: String!
 }
 
 type Student {
@@ -92,6 +99,11 @@ type Student {
   updatedAt: DateTime!
   user: User
   userId: Int!
+}
+
+type Subject {
+  id: Int!
+  number: String!
 }
 
 type User {

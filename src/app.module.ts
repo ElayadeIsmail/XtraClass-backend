@@ -9,9 +9,11 @@ import { InstructorsCoursesModule } from './models/instructors-courses/instructo
 import { InstructorsGroupsModule } from './models/instructors-groups/instructors-groups.module';
 import { InstructorsModule } from './models/instructors/instructors.module';
 import { ParentsModule } from './models/parents/parents.module';
+import { SpecializationsModule } from './models/specializations/specializations.module';
 import { StudentsCoursesModule } from './models/students-courses/students-courses.module';
 import { StudentsGroupsModule } from './models/students-groups/students-groups.module';
 import { StudentsModule } from './models/students/students.module';
+import { SubjectsModule } from './models/subjects/subjects.module';
 import { UsersModule } from './models/users/users.module';
 import { PrismaService } from './services/prisma/prisma.service';
 
@@ -33,6 +35,8 @@ import { PrismaService } from './services/prisma/prisma.service';
     StudentsCoursesModule,
     InstructorsGroupsModule,
     InstructorsCoursesModule,
+    SpecializationsModule,
+    SubjectsModule,
   ],
   providers: [PrismaService],
 })

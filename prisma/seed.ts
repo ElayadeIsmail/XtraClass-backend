@@ -1,11 +1,16 @@
 import { PrismaClient } from '@prisma/client';
-import { gradesData, specializationData, subjectsData } from './data';
+import {
+  coursesData,
+  gradesData,
+  specializationData,
+  subjectsData,
+} from './data';
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log(`Start seeding ...`);
-  //   add seed data
+  // add seed data
   for (const g of gradesData) {
     const grade = await prisma.grade.create({
       data: g,
@@ -20,6 +25,9 @@ async function main() {
       data: subjectsData,
     }),
   ]);
+  await prisma.course.createMany({
+    data: coursesData,
+  });
   console.log(`Seeding finished.`);
 }
 

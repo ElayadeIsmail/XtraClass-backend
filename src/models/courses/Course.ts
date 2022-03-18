@@ -1,6 +1,8 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Grade } from '../grades/Grade';
 import { Level } from '../grades/Level';
+import { Specialization } from '../specializations/Specialization';
+import { Subject } from '../subjects/Subject';
 
 @ObjectType()
 export class Count {
@@ -34,4 +36,8 @@ export class Course {
   specializationId: number;
   @Field(() => Int)
   subjectId: number;
+  @Field(() => Specialization, { nullable: true })
+  specialization?: Specialization;
+  @Field(() => Subject, { nullable: true })
+  subject?: Subject;
 }
