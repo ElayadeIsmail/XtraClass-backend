@@ -76,6 +76,7 @@ type Mutation {
   createCourse(inputs: CreateCourseInput!): Course!
   createGrade(inputs: CreateGradeInputs!): Grade!
   createStudent(inputs: CreateStudentInputs!): Student!
+  deleteCourse(courseId: Int!): Course!
   updateCourseName(courseId: Int!, name: String!): Course!
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
 }

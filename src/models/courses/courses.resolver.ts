@@ -27,6 +27,7 @@ export class CoursesResolver {
   ): Promise<Course> {
     return this.coursesService.updateCourseName({ courseId, name });
   }
+
   @Mutation(() => Course)
   updateCoursePrice(
     @Args('courseId', { type: () => Int }) courseId: number,
@@ -39,6 +40,7 @@ export class CoursesResolver {
       updateForStudents,
     });
   }
+
   @Mutation(() => Course)
   deleteCourse(
     @Args('courseId', { type: () => Int }) courseId: number,
