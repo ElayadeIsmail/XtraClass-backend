@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { CreateCourseInput } from './dto/create-course-inputs';
 
@@ -42,6 +46,30 @@ export class CoursesService {
     });
     return this.prisma.course.create({
       data: inputs,
+    });
+  }
+  async updateCourseName({
+    courseId,
+    name,
+  }: {
+    name: string;
+    courseId: number;
+  }) {
+    const course = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+    if (!course) {
+      throw new NotFoundException();
+    }
+    return this.prisma.course.update({
+      where: {
+        id: courseId,
+      },
+      data: {
+        name,
+      },
     });
   }
 }
