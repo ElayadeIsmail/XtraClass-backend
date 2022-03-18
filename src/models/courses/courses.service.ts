@@ -20,6 +20,8 @@ export class CoursesService {
         _count: true,
         grade: true,
         level: true,
+        subject: true,
+        specialization: true,
       },
     });
     if (!course) {
@@ -33,6 +35,8 @@ export class CoursesService {
       include: {
         grade: true,
         level: true,
+        subject: true,
+        specialization: true,
       },
     });
   }
@@ -144,5 +148,28 @@ export class CoursesService {
     await this.prisma.$transaction(requests);
     course.price = price;
     return course;
+  }
+  async removeCourse(id: number) {
+    const course = await this.prisma.course.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        _count: true,
+      },
+    });
+    if (!course) {
+      throw new NotFoundException();
+    }
+    if (course._count.groups > 0) {
+      throw new BadRequestException('this course still have groups');
+    }
+    if (course._count.students > 0) {
+      throw new BadRequestException('this course still have students');
+    }
+    if (course._count.instructors > 0) {
+      throw new BadRequestException('this course still have instructors');
+    }
+    return this.prisma.course.delete({ where: { id } });
   }
 }

@@ -88,7 +88,7 @@ type Query {
 
 type Specialization {
   id: Int!
-  number: String!
+  name: String!
 }
 
 type Student {
@@ -103,7 +103,7 @@ type Student {
 
 type Subject {
   id: Int!
-  number: String!
+  name: String!
 }
 
 type User {

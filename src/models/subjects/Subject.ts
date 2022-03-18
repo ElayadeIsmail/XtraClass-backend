@@ -5,5 +5,5 @@ export class Subject {
   @Field(() => Int)
   id: number;
   @Field()
-  number: string;
+  name: string;
 }

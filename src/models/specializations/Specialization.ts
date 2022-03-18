@@ -4,6 +4,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 export class Specialization {
   @Field(() => Int)
   id: number;
+
   @Field()
-  number: string;
+  name: string;
 }

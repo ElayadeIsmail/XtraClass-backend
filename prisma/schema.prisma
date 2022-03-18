@@ -146,8 +146,8 @@ model Instructor {
   userId  Int                @unique
   user    User               @relation(fields: [userId], references: [id])
   courses InstructorCourse[]
+  groups  Group[]
 
-  Group Group[]
   @@map("instructors")
 }
 

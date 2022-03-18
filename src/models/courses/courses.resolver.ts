@@ -39,4 +39,10 @@ export class CoursesResolver {
       updateForStudents,
     });
   }
+  @Mutation(() => Course)
+  deleteCourse(
+    @Args('courseId', { type: () => Int }) courseId: number,
+  ): Promise<Course> {
+    return this.coursesService.removeCourse(courseId);
+  }
 }
