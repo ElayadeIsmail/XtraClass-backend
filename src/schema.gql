@@ -2,7 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Count {
+  groups: Int
+  instructors: Int
+  students: Int
+}
+
 type Course {
+  _count: Count
   grade: Grade
   gradeId: Int!
   id: Int!

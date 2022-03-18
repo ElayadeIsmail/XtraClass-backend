@@ -4,11 +4,38 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/services/prisma/prisma.service';
+import { Course } from './Course';
 import { CreateCourseInput } from './dto/create-course-inputs';
 
 @Injectable()
 export class CoursesService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findOne(id: number): Promise<Course> {
+    const course = await this.prisma.course.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        _count: true,
+        grade: true,
+        level: true,
+      },
+    });
+    if (!course) {
+      throw new NotFoundException();
+    }
+    return course;
+  }
+
+  find(): Promise<Course[]> {
+    return this.prisma.course.findMany({
+      include: {
+        grade: true,
+        level: true,
+      },
+    });
+  }
 
   async createCourse(inputs: CreateCourseInput) {
     const { gradeId, levelId, subjectId, specializationId } = inputs;
