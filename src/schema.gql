@@ -2,6 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Course {
+  grade: Grade
+  gradeId: Int!
+  id: Int!
+  level: Level
+  levelId: Int!
+  name: String!
+  price: Int!
+  specializationId: Int!
+  subjectId: Int!
+}
+
+input CreateCourseInput {
+  gradeId: Int!
+  levelId: Int!
+  name: String!
+  price: Float!
+  specializationId: Int!
+  subjectId: Int!
+}
+
 input CreateGradeInputs {
   levels: [GradeLevelsInput!]!
   name: String!
@@ -43,8 +64,11 @@ type Level {
 }
 
 type Mutation {
+  createCourse(inputs: CreateCourseInput!): Course!
   createGrade(inputs: CreateGradeInputs!): Grade!
   createStudent(inputs: CreateStudentInputs!): Student!
+  updateCourseName(courseId: Int!, inputs: String!): Course!
+  updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
 }
 
 type Query {

@@ -72,4 +72,50 @@ export class CoursesService {
       },
     });
   }
+  async updateCoursePrice({
+    courseId,
+    price,
+    updateForStudents,
+  }: {
+    courseId: number;
+    price: number;
+    updateForStudents: boolean;
+  }) {
+    if (price < 0) {
+      throw new BadRequestException('Price must be positive number');
+    }
+    const course = await this.prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+    });
+    if (!course) {
+      throw new NotFoundException();
+    }
+    const requests: any[] = [
+      this.prisma.course.update({
+        where: {
+          id: courseId,
+        },
+        data: {
+          price,
+        },
+      }),
+    ];
+    if (updateForStudents) {
+      requests.push(
+        this.prisma.studentCourse.updateMany({
+          where: {
+            courseId,
+          },
+          data: {
+            price,
+          },
+        }),
+      );
+    }
+    await this.prisma.$transaction(requests);
+    course.price = price;
+    return course;
+  }
 }
