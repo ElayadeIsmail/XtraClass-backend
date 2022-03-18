@@ -16,7 +16,7 @@ type Course {
   level: Level
   levelId: Int!
   name: String!
-  price: Int!
+  price: Float!
   specializationId: Int!
   subjectId: Int!
 }
@@ -74,11 +74,13 @@ type Mutation {
   createCourse(inputs: CreateCourseInput!): Course!
   createGrade(inputs: CreateGradeInputs!): Grade!
   createStudent(inputs: CreateStudentInputs!): Student!
-  updateCourseName(courseId: Int!, inputs: String!): Course!
+  updateCourseName(courseId: Int!, name: String!): Course!
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
 }
 
 type Query {
+  course(id: Int!): Course!
+  courses: Course!
   hello: String!
 }
 
