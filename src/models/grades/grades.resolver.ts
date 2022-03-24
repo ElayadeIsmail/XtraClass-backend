@@ -9,6 +9,6 @@ export class GradesResolver {
 
   @Mutation(() => Grade)
   createGrade(@Args('inputs') inputs: CreateGradeInputs) {
-    return this.gradesService.createGrade(inputs);
+    return this.gradesService.create(inputs);
   }
 }
