@@ -41,7 +41,7 @@ export class SubjectsService {
     return this.prisma.subject.findMany();
   }
 
-  async remove(id: number) {
+  async delete(id: number) {
     const subject = await this.prisma.subject.findUnique({
       where: { id },
       include: {
