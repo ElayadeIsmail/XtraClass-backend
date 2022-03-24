@@ -75,9 +75,11 @@ type Level {
 type Mutation {
   createCourse(inputs: CreateCourseInput!): Course!
   createGrade(inputs: CreateGradeInputs!): Grade!
+  createSpecialization(name: String!): Specialization!
   createStudent(inputs: CreateStudentInputs!): Student!
   createSubject(name: String!): Subject!
   deleteCourse(courseId: Int!): Course!
+  deleteSpecialization(id: Int!): Specialization!
   deleteSubject(id: Int!): Subject!
   updateCourseName(courseId: Int!, name: String!): Course!
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
@@ -86,7 +88,9 @@ type Mutation {
 type Query {
   course(id: Int!): Course!
   courses: [Course!]!
+  findManySpecialization: [Specialization!]!
   findManySubject: [Subject!]!
+  findOneSpecialization(id: Int!): Specialization!
   findOneSubject(id: Int!): Subject!
   hello: String!
 }
