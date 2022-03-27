@@ -4,13 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/services/prisma/prisma.service';
-import { AddInstructorCourse } from './dtos/add-instructor-course-input';
+import { AddInstructorCourseInputs } from './dtos/add-instructor-course-input';
 
 @Injectable()
 export class InstructorsCoursesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async addInstructorToCourse(inputs: AddInstructorCourse) {
+  async addInstructorToCourse(inputs: AddInstructorCourseInputs) {
     const { courseId, instructorId, percentage } = inputs;
     const coursePromise = this.prisma.course.findUnique({
       where: { id: courseId },
@@ -74,11 +74,7 @@ export class InstructorsCoursesService {
       },
     });
   }
-  async removeInstructorFromCourse({
-    instructorCourseId,
-  }: {
-    instructorCourseId: number;
-  }) {
+  async removeInstructorFromCourse(instructorCourseId: number) {
     const instructorCourse = await this.prisma.instructorCourse.findUnique({
       where: { id: instructorCourseId },
     });

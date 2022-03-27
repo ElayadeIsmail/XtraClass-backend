@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddInstructorCourseInputs {
+  courseId: Int!
+  instructorId: Int!
+  percentage: Float!
+}
+
 type Count {
   groups: Int
   instructors: Int
@@ -138,6 +144,7 @@ type Level {
 }
 
 type Mutation {
+  addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
   createCourse(inputs: CreateCourseInput!): Course!
   createGrade(inputs: CreateGradeInputs!): Grade!
   createGroup(inputs: CreateGroupInputs!): Group!
@@ -150,8 +157,10 @@ type Mutation {
   deleteInstructor(id: Int!): Instructor!
   deleteSpecialization(id: Int!): Specialization!
   deleteSubject(id: Int!): Subject!
+  removeInstructorFromCourse(instructorCourseId: Int!): InstructorCourse!
   updateCourseName(courseId: Int!, name: String!): Course!
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
+  updateInstructorCoursePercentage(instructorCourseId: Int!, percentage: Float!): InstructorCourse!
 }
 
 type Query {
