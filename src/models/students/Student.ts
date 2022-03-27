@@ -1,5 +1,17 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Grade } from '../grades/Grade';
+import { Level } from '../grades/Level';
+import { Group } from '../groups/Group';
+import { Parent } from '../parents/Parent';
+import { StudentCourse } from '../students-courses/StudentCourse';
 import { User } from '../users/User';
+
+export class StudentsCount {
+  @Field(() => Int)
+  courses: number;
+  @Field(() => Int)
+  groups: number;
+}
 
 @ObjectType()
 export class Student {
@@ -12,8 +24,29 @@ export class Student {
   @Field(() => Int)
   gradeId: number;
 
+  @Field(() => Grade)
+  grade: Grade;
+
+  @Field(() => Level)
+  level: Level;
+
+  @Field(() => StudentsCount, { nullable: true })
+  _count?: StudentsCount;
+
+  @Field(() => Int, { nullable: true })
+  parentId?: number;
+
+  @Field(() => Parent, { nullable: true })
+  parent?: Parent;
+
+  @Field(() => [Group], { nullable: true })
+  groups?: Group[];
+
   @Field(() => Int)
   userId: number;
+
+  @Field(() => [StudentCourse], { nullable: true })
+  courses?: StudentCourse[];
 
   @Field(() => User, { nullable: true })
   user?: User;

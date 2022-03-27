@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateStudentInputs } from './dto/create-student.inputs';
 import { Student } from './Student';
 import { StudentsService } from './students.service';
@@ -11,5 +11,21 @@ export class StudentsResolver {
     @Args('inputs') inputs: CreateStudentInputs,
   ): Promise<Student> {
     return this.studentsService.createStudent(inputs);
+  }
+
+  @Query(() => Student)
+  findOneStudent(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<Student> {
+    return this.studentsService.findOne(id);
+  }
+  @Query(() => [Student])
+  findStudents(): Promise<Student[]> {
+    return this.studentsService.find();
+  }
+
+  @Mutation(() => Student)
+  deleteStudent(@Args('id', { type: () => Int }) id: number) {
+    return this.studentsService.delete(id);
   }
 }

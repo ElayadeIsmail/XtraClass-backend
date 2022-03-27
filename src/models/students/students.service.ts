@@ -1,8 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { Role, Student } from '@prisma/client';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaPromise, Role } from '@prisma/client';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { CreateStudentInputs } from './dto/create-student.inputs';
+import { Student } from './Student';
 
 @Injectable()
 export class StudentsService {
@@ -73,6 +78,8 @@ export class StudentsService {
     return this.prisma.student.create({
       include: {
         user: true,
+        grade: true,
+        level: true,
       },
       data: {
         level: {
@@ -95,5 +102,92 @@ export class StudentsService {
         },
       },
     });
+  }
+
+  async findOne(id: number): Promise<Student> {
+    const student = await this.prisma.student.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        _count: true,
+        parent: true,
+        user: true,
+        grade: true,
+        level: true,
+        courses: {
+          include: { course: true },
+        },
+        groups: true,
+      },
+    });
+    if (!student) {
+      throw new NotFoundException();
+    }
+    return student;
+  }
+
+  async find(): Promise<Student[]> {
+    return this.prisma.student.findMany({
+      include: {
+        _count: true,
+        user: true,
+        level: true,
+        grade: true,
+      },
+    });
+  }
+
+  async delete(id: number): Promise<Student> {
+    const student = await this.prisma.student.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        user: true,
+        level: true,
+        grade: true,
+        parent: {
+          select: {
+            id: true,
+            userId: true,
+            _count: {
+              select: {
+                students: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!student) {
+      throw new NotFoundException();
+    }
+    const prismaPromises: PrismaPromise<any>[] = [
+      this.prisma.student.delete({ where: { id } }),
+      this.prisma.user.delete({
+        where: {
+          id: student.userId,
+        },
+      }),
+    ];
+    if (student.parent._count.students === 1) {
+      prismaPromises.push(
+        this.prisma.parent.delete({
+          where: {
+            id: student.parentId,
+          },
+        }),
+      );
+      prismaPromises.push(
+        this.prisma.user.delete({
+          where: {
+            id: student.parent.userId,
+          },
+        }),
+      );
+    }
+    await this.prisma.$transaction(prismaPromises);
+    return student;
   }
 }

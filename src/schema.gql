@@ -208,6 +208,8 @@ type Student {
   gradeId: Int!
   id: Int!
   levelId: Int!
+  parent: Parent
+  parentId: Int
   updatedAt: DateTime!
   user: User
   userId: Int!
