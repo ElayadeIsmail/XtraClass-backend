@@ -60,6 +60,18 @@ input CreateInstructorInputs {
   username: String!
 }
 
+input CreateParentInput {
+  address: String!
+  birthDate: DateTime!
+  cin: String
+  firstName: String!
+  lastName: String!
+  phone: String!
+  photo: String
+  studentId: Int!
+  username: String!
+}
+
 input CreateStudentInputs {
   address: String!
   birthDate: DateTime!
@@ -150,6 +162,7 @@ type Mutation {
   createGrade(inputs: CreateGradeInputs!): Grade!
   createGroup(inputs: CreateGroupInputs!): Group!
   createInstructor(inputs: CreateInstructorInputs!): Instructor!
+  createParent(inputs: CreateParentInput!): Parent!
   createSpecialization(name: String!): Specialization!
   createStudent(inputs: CreateStudentInputs!): Student!
   createSubject(name: String!): Subject!
@@ -162,6 +175,13 @@ type Mutation {
   updateCourseName(courseId: Int!, name: String!): Course!
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
   updateInstructorCoursePercentage(instructorCourseId: Int!, percentage: Float!): InstructorCourse!
+}
+
+type Parent {
+  id: Int!
+  students: [Student!]
+  user: User
+  userId: Int!
 }
 
 type Query {
