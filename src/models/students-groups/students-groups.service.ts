@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/services/prisma/prisma.service';
+import { Group } from '../groups/Group';
+import { Student } from '../students/Student';
 import {
   addStudentsToGroup,
   addStudentToGroup,
@@ -17,7 +19,10 @@ import {
 export class StudentsGroupsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async addStudentToGroup({ groupId, studentId }: addStudentToGroup) {
+  async addStudentToGroup({
+    groupId,
+    studentId,
+  }: addStudentToGroup): Promise<Student> {
     const group = await this.prisma.group.findUnique({
       where: { id: groupId },
     });
@@ -70,7 +75,10 @@ export class StudentsGroupsService {
       },
     });
   }
-  async addStudentsToGroup({ groupId, studentsIds }: addStudentsToGroup) {
+  async addStudentsToGroup({
+    groupId,
+    studentsIds,
+  }: addStudentsToGroup): Promise<Group> {
     const group = await this.prisma.group.findUnique({
       where: { id: groupId },
     });
@@ -134,7 +142,7 @@ export class StudentsGroupsService {
     newGroupId,
     oldGroupId,
     studentId,
-  }: changeStudentGroup) {
+  }: changeStudentGroup): Promise<Student> {
     const studentPromise = this.prisma.student.findUnique({
       where: {
         id: studentId,
@@ -201,7 +209,7 @@ export class StudentsGroupsService {
     newGroupId,
     oldGroupId,
     studentsIds,
-  }: changeStudentsGroup) {
+  }: changeStudentsGroup): Promise<Group> {
     const studentsPromise = this.prisma.student.findMany({
       where: {
         id: {
@@ -298,16 +306,17 @@ export class StudentsGroupsService {
         },
       },
     });
-    return this.prisma.$transaction([
+    await this.prisma.$transaction([
       updateOldGroupStudentsPromise,
       updateNewGroupStudentsPromise,
     ]);
+    return newGroup;
   }
 
   async removeStudentFromGroup({
     groupId,
     studentId,
-  }: RemoveStudentFromGroupInputs) {
+  }: RemoveStudentFromGroupInputs): Promise<Student> {
     const student = await this.prisma.student.findUnique({
       where: {
         id: studentId,
@@ -343,7 +352,7 @@ export class StudentsGroupsService {
   async removeStudentsFromGroup({
     studentsId,
     groupId,
-  }: RemoveStudentsFromGroupInputs) {
+  }: RemoveStudentsFromGroupInputs): Promise<Group> {
     const group = await this.prisma.group.findUnique({
       where: {
         id: groupId,

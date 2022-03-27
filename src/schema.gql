@@ -165,7 +165,11 @@ type Level {
 type Mutation {
   addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
   addStudentToCourse(inputs: AddStudentToCourse!): StudentCourse!
+  addStudentToGroup(inputs: addStudentToGroup!): Student!
+  addStudentsToGroup(inputs: addStudentsToGroup!): Group!
   changeGroupInstructor(groupId: Int!, instructorId: Int!): Group!
+  changeStudentGroup(inputs: changeStudentGroup!): Student!
+  changeStudentsGroup(inputs: changeStudentsGroup!): Group!
   createCourse(inputs: CreateCourseInput!): Course!
   createGrade(inputs: CreateGradeInputs!): Grade!
   createGroup(inputs: CreateGroupInputs!): Group!
@@ -182,6 +186,8 @@ type Mutation {
   deleteSubject(id: Int!): Subject!
   removeInstructorFromCourse(instructorCourseId: Int!): InstructorCourse!
   removeStudentCourse(studentCourseId: Int!): StudentCourse!
+  removeStudentFromGroup(inputs: RemoveStudentFromGroupInputs!): Student!
+  removeStudentsFromGroup(inputs: RemoveStudentsFromGroupInputs!): Group!
   updateCourseName(courseId: Int!, name: String!): Course!
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
   updateInstructorCoursePercentage(instructorCourseId: Int!, percentage: Float!): InstructorCourse!
@@ -209,6 +215,16 @@ type Query {
   findOneSubject(id: Int!): Subject!
   findStudents: [Student!]!
   hello: String!
+}
+
+input RemoveStudentFromGroupInputs {
+  groupId: Int!
+  studentId: Int!
+}
+
+input RemoveStudentsFromGroupInputs {
+  groupId: Int!
+  studentsId: [Int!]!
 }
 
 type Specialization {
@@ -267,4 +283,26 @@ type User {
   role: String!
   updatedAt: DateTime!
   username: String!
+}
+
+input addStudentToGroup {
+  groupId: Int!
+  studentId: Int!
+}
+
+input addStudentsToGroup {
+  groupId: Int!
+  studentsIds: [Int!]!
+}
+
+input changeStudentGroup {
+  newGroupId: Int!
+  oldGroupId: Int!
+  studentId: Int!
+}
+
+input changeStudentsGroup {
+  newGroupId: Int!
+  oldGroupId: Int!
+  studentsIds: [Int!]!
 }
