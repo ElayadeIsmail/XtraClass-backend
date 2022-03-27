@@ -3,7 +3,7 @@ import { CreateInstructorInputs } from './dtos/create-instructor-inputs';
 import { Instructor } from './Instructor';
 import { InstructorsService } from './instructors.service';
 
-@Resolver((of) => Instructor)
+@Resolver(() => Instructor)
 export class InstructorsResolver {
   constructor(private readonly instructorsService: InstructorsService) {}
 

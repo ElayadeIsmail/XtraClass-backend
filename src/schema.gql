@@ -109,9 +109,25 @@ type GroupCount {
 }
 
 type Instructor {
+  _count: InstructorCount
+  courses: [InstructorCourse!]
+  groups: [Group!]
   id: Int!
   user: User
   userId: Int!
+}
+
+type InstructorCount {
+  courses: Int!
+  groups: Int!
+}
+
+type InstructorCourse {
+  course: Course
+  courseId: Int!
+  id: Int!
+  instructorId: Int!
+  percentage: Float!
 }
 
 type Level {

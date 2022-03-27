@@ -1,13 +1,18 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { CreateInstructorInputs } from './dtos/create-instructor-inputs';
+import { Instructor } from './Instructor';
 
 @Injectable()
 export class InstructorsService {
   constructor(private readonly prisma: PrismaService) {}
-  async createInstructor(inputs: CreateInstructorInputs) {
+  async createInstructor(inputs: CreateInstructorInputs): Promise<Instructor> {
     const nameAlreadyExistPromise = this.prisma.user.findUnique({
       where: {
         username: inputs.username,
@@ -66,5 +71,69 @@ export class InstructorsService {
         },
       },
     });
+  }
+
+  async findOne(id: number): Promise<Instructor> {
+    const instructor = await this.prisma.instructor.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        _count: true,
+        user: true,
+        courses: {
+          include: {
+            course: true,
+          },
+        },
+        groups: true,
+      },
+    });
+    if (!instructor) {
+      throw new NotFoundException();
+    }
+    return instructor;
+  }
+  async find(): Promise<Instructor[]> {
+    return this.prisma.instructor.findMany({
+      include: {
+        _count: true,
+        user: true,
+      },
+    });
+  }
+
+  async delete(id: number): Promise<Instructor> {
+    const instructor = await this.prisma.instructor.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        _count: true,
+      },
+    });
+    if (!instructor) {
+      throw new NotFoundException();
+    }
+    if (instructor._count.groups > 0) {
+      throw new BadRequestException(
+        'This Instructor still associated with groups',
+      );
+    }
+    const deleteInstructorPromise = this.prisma.instructor.delete({
+      where: {
+        id,
+      },
+    });
+    const deleteInstructorUserPromise = this.prisma.user.delete({
+      where: {
+        id: instructor.userId,
+      },
+    });
+    await this.prisma.$transaction([
+      deleteInstructorPromise,
+      deleteInstructorUserPromise,
+    ]);
+    return instructor;
   }
 }
