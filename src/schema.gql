@@ -8,6 +8,13 @@ input AddInstructorCourseInputs {
   percentage: Float!
 }
 
+input AddStudentToCourse {
+  courseId: Int!
+  groupId: Int!
+  price: Float
+  studentId: Int!
+}
+
 type Count {
   groups: Int
   instructors: Int
@@ -157,6 +164,7 @@ type Level {
 
 type Mutation {
   addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
+  addStudentToCourse(inputs: AddStudentToCourse!): StudentCourse!
   changeGroupInstructor(groupId: Int!, instructorId: Int!): Group!
   createCourse(inputs: CreateCourseInput!): Course!
   createGrade(inputs: CreateGradeInputs!): Grade!
@@ -170,11 +178,14 @@ type Mutation {
   deleteGroup(id: Int!): Group!
   deleteInstructor(id: Int!): Instructor!
   deleteSpecialization(id: Int!): Specialization!
+  deleteStudent(id: Int!): Student!
   deleteSubject(id: Int!): Subject!
   removeInstructorFromCourse(instructorCourseId: Int!): InstructorCourse!
+  removeStudentCourse(studentCourseId: Int!): StudentCourse!
   updateCourseName(courseId: Int!, name: String!): Course!
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
   updateInstructorCoursePercentage(instructorCourseId: Int!, percentage: Float!): InstructorCourse!
+  updateStudentCourse(price: Float!, studentCourseId: Int!): StudentCourse!
 }
 
 type Parent {
@@ -194,7 +205,9 @@ type Query {
   findOneGroup(id: Int!): Group!
   findOneInstructor(id: Int!): Instructor!
   findOneSpecialization(id: Int!): Specialization!
+  findOneStudent(id: Int!): Student!
   findOneSubject(id: Int!): Subject!
+  findStudents: [Student!]!
   hello: String!
 }
 
@@ -204,15 +217,34 @@ type Specialization {
 }
 
 type Student {
+  _count: StudentsCount
+  courses: [StudentCourse!]
   createdAt: DateTime!
+  grade: Grade
   gradeId: Int!
+  groups: [Group!]
   id: Int!
+  level: Level
   levelId: Int!
   parent: Parent
   parentId: Int
   updatedAt: DateTime!
   user: User
   userId: Int!
+}
+
+type StudentCourse {
+  course: Course!
+  courseId: Int!
+  id: Int!
+  price: Float!
+  student: Student
+  studentId: Int!
+}
+
+type StudentsCount {
+  courses: Int!
+  groups: Int!
 }
 
 type Subject {

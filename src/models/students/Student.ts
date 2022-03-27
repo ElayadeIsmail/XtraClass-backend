@@ -6,6 +6,7 @@ import { Parent } from '../parents/Parent';
 import { StudentCourse } from '../students-courses/StudentCourse';
 import { User } from '../users/User';
 
+@ObjectType()
 export class StudentsCount {
   @Field(() => Int)
   courses: number;
@@ -24,11 +25,11 @@ export class Student {
   @Field(() => Int)
   gradeId: number;
 
-  @Field(() => Grade)
-  grade: Grade;
+  @Field(() => Grade, { nullable: true })
+  grade?: Grade;
 
-  @Field(() => Level)
-  level: Level;
+  @Field(() => Level, { nullable: true })
+  level?: Level;
 
   @Field(() => StudentsCount, { nullable: true })
   _count?: StudentsCount;

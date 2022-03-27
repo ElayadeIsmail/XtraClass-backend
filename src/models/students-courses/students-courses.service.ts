@@ -81,13 +81,7 @@ export class StudentsCoursesService {
     ]);
     return studentCourse;
   }
-  async updateStudentCourse({
-    price,
-    studentCourseId,
-  }: {
-    price: number;
-    studentCourseId: number;
-  }) {
+  async updateStudentCourse(price: number, studentCourseId: number) {
     const studentCourse = await this.prisma.studentCourse.findUnique({
       where: {
         id: studentCourseId,
@@ -105,7 +99,7 @@ export class StudentsCoursesService {
       },
     });
   }
-  async removeStudentCourse({ studentCourseId }: { studentCourseId: number }) {
+  async removeStudentCourse(studentCourseId: number) {
     const studentCourse = await this.prisma.studentCourse.findUnique({
       where: { id: studentCourseId },
     });
