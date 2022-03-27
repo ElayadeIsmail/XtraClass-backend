@@ -145,6 +145,7 @@ type Level {
 
 type Mutation {
   addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
+  changeGroupInstructor(groupId: Int!, instructorId: Int!): Group!
   createCourse(inputs: CreateCourseInput!): Course!
   createGrade(inputs: CreateGradeInputs!): Grade!
   createGroup(inputs: CreateGroupInputs!): Group!

@@ -4,18 +4,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/services/prisma/prisma.service';
+import { Group } from '../groups/Group';
 
 @Injectable()
 export class InstructorsGroupsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async changeGroupInstructor({
-    instructorId,
-    groupId,
-  }: {
-    instructorId: number;
-    groupId: number;
-  }) {
+  async changeGroupInstructor(
+    instructorId: number,
+    groupId: number,
+  ): Promise<Group> {
     const group = await this.prisma.group.findUnique({
       where: {
         id: groupId,
