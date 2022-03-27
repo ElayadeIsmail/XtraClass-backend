@@ -147,6 +147,7 @@ type Mutation {
   createSubject(name: String!): Subject!
   deleteCourse(courseId: Int!): Course!
   deleteGroup(id: Int!): Group!
+  deleteInstructor(id: Int!): Instructor!
   deleteSpecialization(id: Int!): Specialization!
   deleteSubject(id: Int!): Subject!
   updateCourseName(courseId: Int!, name: String!): Course!
@@ -157,9 +158,11 @@ type Query {
   course(id: Int!): Course!
   courses: [Course!]!
   findGroups: [Group!]!
+  findInstructors: [Instructor!]!
   findManySpecialization: [Specialization!]!
   findManySubject: [Subject!]!
   findOneGroup(id: Int!): Group!
+  findOneInstructor(id: Int!): Instructor!
   findOneSpecialization(id: Int!): Specialization!
   findOneSubject(id: Int!): Subject!
   hello: String!
