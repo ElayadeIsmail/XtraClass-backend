@@ -134,7 +134,7 @@ model StudentCourse {
   studentId Int
   student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
   courseId  Int
-  course    Course  @relation(fields: [courseId], references: [id])
+  course    Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
   price     Float
 
   @@unique([studentId, courseId])
@@ -156,7 +156,7 @@ model InstructorCourse {
   instructorId Int
   instructor   Instructor @relation(fields: [instructorId], references: [id], onDelete: Cascade)
   courseId     Int
-  course       Course     @relation(fields: [courseId], references: [id])
+  course       Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
   percentage   Float
 
 
@@ -166,7 +166,7 @@ model InstructorCourse {
 
 model Group {
   id           Int        @id @default(autoincrement())
-  name         String
+  name         String     @unique
   courseId     Int
   course       Course     @relation(fields: [courseId], references: [id])
   instructorId Int

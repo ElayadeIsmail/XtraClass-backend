@@ -11,10 +11,4 @@ export class Instructor {
 
   @Field(() => User, { nullable: true })
   user?: User;
-
-  @Field(() => Date)
-  createdAt: Date;
-
-  @Field(() => Date)
-  updatedAt: Date;
 }

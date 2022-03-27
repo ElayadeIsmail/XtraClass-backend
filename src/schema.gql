@@ -37,6 +37,23 @@ input CreateGradeInputs {
   name: String!
 }
 
+input CreateGroupInputs {
+  courseId: Int!
+  instructorId: Int!
+  name: String!
+}
+
+input CreateInstructorInputs {
+  address: String!
+  birthDate: DateTime!
+  cin: String
+  firstName: String!
+  lastName: String!
+  phone: String!
+  photo: String
+  username: String!
+}
+
 input CreateStudentInputs {
   address: String!
   birthDate: DateTime!
@@ -76,6 +93,27 @@ input GradeLevelsInput {
   name: String!
 }
 
+type Group {
+  _count: GroupCount
+  course: Course
+  courseId: Int!
+  id: Int!
+  instructor: Instructor
+  instructorId: Int!
+  name: String!
+  students: [Student!]
+}
+
+type GroupCount {
+  students: Int!
+}
+
+type Instructor {
+  id: Int!
+  user: User
+  userId: Int!
+}
+
 type Level {
   grade: Grade
   gradeId: Int!
@@ -86,10 +124,13 @@ type Level {
 type Mutation {
   createCourse(inputs: CreateCourseInput!): Course!
   createGrade(inputs: CreateGradeInputs!): Grade!
+  createGroup(inputs: CreateGroupInputs!): Group!
+  createInstructor(inputs: CreateInstructorInputs!): Instructor!
   createSpecialization(name: String!): Specialization!
   createStudent(inputs: CreateStudentInputs!): Student!
   createSubject(name: String!): Subject!
   deleteCourse(courseId: Int!): Course!
+  deleteGroup(id: Int!): Group!
   deleteSpecialization(id: Int!): Specialization!
   deleteSubject(id: Int!): Subject!
   updateCourseName(courseId: Int!, name: String!): Course!
@@ -99,8 +140,10 @@ type Mutation {
 type Query {
   course(id: Int!): Course!
   courses: [Course!]!
+  findGroups: [Group!]!
   findManySpecialization: [Specialization!]!
   findManySubject: [Subject!]!
+  findOneGroup(id: Int!): Group!
   findOneSpecialization(id: Int!): Specialization!
   findOneSubject(id: Int!): Subject!
   hello: String!
