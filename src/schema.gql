@@ -204,10 +204,13 @@ type Parent {
 type Query {
   course(id: Int!): Course!
   courses: [Course!]!
+  findGrades: [Grade!]!
   findGroups: [Group!]!
   findInstructors: [Instructor!]!
+  findLevels(gradeId: Int!): [Grade!]!
   findManySpecialization: [Specialization!]!
   findManySubject: [Subject!]!
+  findOneGrade(id: Int!): Grade!
   findOneGroup(id: Int!): Group!
   findOneInstructor(id: Int!): Instructor!
   findOneSpecialization(id: Int!): Specialization!
