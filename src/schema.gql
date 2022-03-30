@@ -89,6 +89,7 @@ input CreateStudentInputs {
   levelId: Int!
   phone: String!
   photo: String
+  specializationId: Int
   username: String!
 }
 
@@ -163,29 +164,29 @@ type Level {
 }
 
 type Mutation {
+  addCourse(inputs: CreateCourseInput!): Course!
+  addGrade(inputs: CreateGradeInputs!): Grade!
+  addGroup(inputs: CreateGroupInputs!): Group!
+  addInstructor(inputs: CreateInstructorInputs!): Instructor!
   addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
+  addParent(inputs: CreateParentInput!): Parent!
+  addStudent(inputs: CreateStudentInputs!): Student!
   addStudentToCourse(inputs: AddStudentToCourse!): StudentCourse!
   addStudentToGroup(inputs: addStudentToGroup!): Student!
   addStudentsToGroup(inputs: addStudentsToGroup!): Group!
+  addSubject(name: String!): Subject!
   changeGroupInstructor(groupId: Int!, instructorId: Int!): Group!
   changeStudentGroup(inputs: changeStudentGroup!): Student!
   changeStudentsGroup(inputs: changeStudentsGroup!): Group!
-  createCourse(inputs: CreateCourseInput!): Course!
-  createGrade(inputs: CreateGradeInputs!): Grade!
-  createGroup(inputs: CreateGroupInputs!): Group!
-  createInstructor(inputs: CreateInstructorInputs!): Instructor!
-  createParent(inputs: CreateParentInput!): Parent!
   createSpecialization(name: String!): Specialization!
-  createStudent(inputs: CreateStudentInputs!): Student!
-  createSubject(name: String!): Subject!
   deleteCourse(courseId: Int!): Course!
   deleteGroup(id: Int!): Group!
   deleteInstructor(id: Int!): Instructor!
+  deleteInstructorFromCourse(instructorCourseId: Int!): InstructorCourse!
   deleteSpecialization(id: Int!): Specialization!
   deleteStudent(id: Int!): Student!
   deleteSubject(id: Int!): Subject!
-  removeInstructorFromCourse(instructorCourseId: Int!): InstructorCourse!
-  removeStudentCourse(studentCourseId: Int!): StudentCourse!
+  deletetudentCourse(studentCourseId: Int!): StudentCourse!
   removeStudentFromGroup(inputs: RemoveStudentFromGroupInputs!): Student!
   removeStudentsFromGroup(inputs: RemoveStudentsFromGroupInputs!): Group!
   updateCourseName(courseId: Int!, name: String!): Course!
@@ -204,20 +205,20 @@ type Parent {
 type Query {
   course(id: Int!): Course!
   courses: [Course!]!
-  findGrades: [Grade!]!
-  findGroups: [Group!]!
-  findInstructors: [Instructor!]!
-  findLevels(gradeId: Int!): [Grade!]!
-  findManySpecialization: [Specialization!]!
-  findManySubject: [Subject!]!
-  findOneGrade(id: Int!): Grade!
-  findOneGroup(id: Int!): Group!
-  findOneInstructor(id: Int!): Instructor!
-  findOneSpecialization(id: Int!): Specialization!
-  findOneStudent(id: Int!): Student!
-  findOneSubject(id: Int!): Subject!
-  findStudents: [Student!]!
+  grade(id: Int!): Grade!
+  grades: [Grade!]!
+  group(id: Int!): Group!
+  groups: [Group!]!
   hello: String!
+  instructor(id: Int!): Instructor!
+  instructors: [Instructor!]!
+  levels(gradeId: Int!): [Grade!]!
+  specialization(id: Int!): Specialization!
+  specializations: [Specialization!]!
+  student(id: Int!): Student!
+  students: [Student!]!
+  subject(id: Int!): Subject!
+  subjects: [Subject!]!
 }
 
 input RemoveStudentFromGroupInputs {
@@ -233,6 +234,7 @@ input RemoveStudentsFromGroupInputs {
 type Specialization {
   id: Int!
   name: String!
+  students: [Student!]
 }
 
 type Student {
@@ -247,6 +249,8 @@ type Student {
   levelId: Int!
   parent: Parent
   parentId: Int
+  specialization: Specialization
+  specializationId: Int
   updatedAt: DateTime!
   user: User
   userId: Int!

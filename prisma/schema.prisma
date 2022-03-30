@@ -44,19 +44,21 @@ model User {
 }
 
 model Student {
-  id        Int             @id @default(autoincrement())
-  userId    Int             @unique
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parentId  Int?
-  parent    Parent?         @relation(fields: [parentId], references: [id], onDelete: Restrict)
-  gradeId   Int
-  grade     Grade           @relation(fields: [gradeId], references: [id], onDelete: Restrict)
-  levelId   Int
-  level     Level           @relation(fields: [levelId], references: [id], onDelete: Restrict)
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
-  courses   StudentCourse[]
-  groups    Group[]
+  id               Int             @id @default(autoincrement())
+  userId           Int             @unique
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentId         Int?
+  parent           Parent?         @relation(fields: [parentId], references: [id], onDelete: Restrict)
+  gradeId          Int
+  grade            Grade           @relation(fields: [gradeId], references: [id], onDelete: Restrict)
+  levelId          Int
+  level            Level           @relation(fields: [levelId], references: [id], onDelete: Restrict)
+  specializationId Int?
+  specialization   Specialization? @relation(fields: [specializationId], references: [id], onDelete: Restrict)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  courses          StudentCourse[]
+  groups           Group[]
 
   @@map("students")
 }
@@ -95,9 +97,10 @@ model Level {
 }
 
 model Specialization {
-  id      Int      @id @default(autoincrement())
-  name    String   @unique
-  courses Course[]
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  courses  Course[]
+  students Student[]
 
   @@map("specializations")
 }

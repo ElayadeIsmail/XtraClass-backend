@@ -73,6 +73,16 @@ export class StudentsService {
     if (level.gradeId !== gradeId) {
       throw new BadRequestException('Level must be for grad ');
     }
+    if (inputs.specializationId) {
+      const specialization = await this.prisma.specialization.findUnique({
+        where: {
+          id: inputs.specializationId,
+        },
+      });
+      if (!specialization) {
+        throw new BadRequestException('specialization does not exist');
+      }
+    }
     const generatedPassword = PasswordManager.generatePassword();
     const hashedPassword = await PasswordManager.hash(generatedPassword);
     return this.prisma.student.create({
@@ -80,6 +90,7 @@ export class StudentsService {
         user: true,
         grade: true,
         level: true,
+        specialization: true,
       },
       data: {
         level: {
@@ -115,6 +126,7 @@ export class StudentsService {
         user: true,
         grade: true,
         level: true,
+        specialization: true,
         courses: {
           include: { course: true },
         },
@@ -134,6 +146,7 @@ export class StudentsService {
         user: true,
         level: true,
         grade: true,
+        specialization: true,
       },
     });
   }
@@ -147,6 +160,7 @@ export class StudentsService {
         user: true,
         level: true,
         grade: true,
+        specialization: true,
         parent: {
           select: {
             id: true,

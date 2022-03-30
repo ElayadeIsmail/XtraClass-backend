@@ -8,4 +8,7 @@ export class CreateStudentInputs extends CreateUserInputs {
 
   @Field(() => Int)
   gradeId: number;
+
+  @Field(() => Int, { nullable: true })
+  specializationId: number;
 }

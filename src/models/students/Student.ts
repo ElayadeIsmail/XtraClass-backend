@@ -3,6 +3,7 @@ import { Grade } from '../grades/Grade';
 import { Level } from '../grades/Level';
 import { Group } from '../groups/Group';
 import { Parent } from '../parents/Parent';
+import { Specialization } from '../specializations/Specialization';
 import { StudentCourse } from '../students-courses/StudentCourse';
 import { User } from '../users/User';
 
@@ -27,6 +28,12 @@ export class Student {
 
   @Field(() => Grade, { nullable: true })
   grade?: Grade;
+
+  @Field(() => Int, { nullable: true })
+  specializationId?: number;
+
+  @Field(() => Specialization, { nullable: true })
+  specialization?: Specialization;
 
   @Field(() => Level, { nullable: true })
   level?: Level;
