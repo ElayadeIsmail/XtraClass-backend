@@ -22,7 +22,7 @@ export class SpecializationsResolver {
     return this.specializationsService.findOne(id);
   }
   @Query(() => [Specialization])
-  async Specializations(): Promise<Specialization[]> {
+  async specializations(): Promise<Specialization[]> {
     return this.specializationsService.find();
   }
 
