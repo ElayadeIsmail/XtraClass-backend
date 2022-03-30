@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
+import slugify from 'slugify';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { CreateParentInput } from './dtos/create-parent.inputs';
@@ -10,6 +11,7 @@ export class ParentsService {
   constructor(private readonly prisma: PrismaService) {}
   async createParent(inputs: CreateParentInput): Promise<Parent> {
     const { studentId, ...userInput } = inputs;
+    const username = slugify(userInput.firstName + ' ' + userInput.lastName);
     const student = await this.prisma.student.findUnique({
       where: {
         id: studentId,
@@ -20,7 +22,7 @@ export class ParentsService {
     }
     const nameAlreadyExistPromise = this.prisma.user.findUnique({
       where: {
-        username: userInput.username,
+        username: username,
       },
     });
     const phoneAlreadyExistPromise = this.prisma.user.findUnique({
@@ -71,6 +73,7 @@ export class ParentsService {
         user: {
           create: {
             ...userInput,
+            username,
             password: hashedPassword,
             generatedPassword,
             role: Role.Parent,

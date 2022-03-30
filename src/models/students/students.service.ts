@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaPromise, Role } from '@prisma/client';
+import slugify from 'slugify';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { CreateStudentInputs } from './dto/create-student.inputs';
@@ -15,9 +16,10 @@ export class StudentsService {
 
   async createStudent(inputs: CreateStudentInputs): Promise<Student> {
     const { levelId, gradeId, ...userInput } = inputs;
+    const username = slugify(inputs.firstName + ' ' + inputs.lastName);
     const nameAlreadyExistPromise = this.prisma.user.findUnique({
       where: {
-        username: userInput.username,
+        username,
       },
     });
     const phoneAlreadyExistPromise = this.prisma.user.findUnique({
@@ -106,6 +108,7 @@ export class StudentsService {
         user: {
           create: {
             ...userInput,
+            username,
             password: hashedPassword,
             generatedPassword,
             role: Role.Student,
