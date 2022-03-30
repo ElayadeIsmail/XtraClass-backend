@@ -15,7 +15,7 @@ export class StudentsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createStudent(inputs: CreateStudentInputs): Promise<Student> {
-    const { levelId, gradeId, ...userInput } = inputs;
+    const { levelId, gradeId, specializationId, ...userInput } = inputs;
     const username = slugify(inputs.firstName + ' ' + inputs.lastName);
     const nameAlreadyExistPromise = this.prisma.user.findUnique({
       where: {
@@ -98,6 +98,11 @@ export class StudentsService {
         level: {
           connect: {
             id: levelId,
+          },
+        },
+        specialization: {
+          connect: {
+            id: specializationId,
           },
         },
         grade: {
