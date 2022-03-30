@@ -12,20 +12,20 @@ export class GradesResolver {
   ) {}
 
   @Mutation(() => Grade)
-  createGrade(@Args('inputs') inputs: CreateGradeInputs) {
+  addGrade(@Args('inputs') inputs: CreateGradeInputs) {
     return this.gradesService.create(inputs);
   }
 
   @Query(() => Grade)
-  findOneGrade(@Args('id', { type: () => Int }) id: number) {
+  grade(@Args('id', { type: () => Int }) id: number) {
     return this.gradesService.findOne(id);
   }
   @Query(() => [Grade])
-  findGrades() {
+  grades() {
     return this.gradesService.find();
   }
   @Query(() => [Grade])
-  findLevels(@Args('gradeId', { type: () => Int }) gradeId: number) {
+  levels(@Args('gradeId', { type: () => Int }) gradeId: number) {
     return this.levelsService.find(gradeId);
   }
 }

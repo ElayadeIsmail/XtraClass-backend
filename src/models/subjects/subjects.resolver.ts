@@ -7,18 +7,16 @@ export class SubjectsResolver {
   constructor(private readonly subjectsService: SubjectsService) {}
 
   @Mutation(() => Subject)
-  async createSubject(@Args('name') name: string): Promise<Subject> {
+  async addSubject(@Args('name') name: string): Promise<Subject> {
     return this.subjectsService.create(name);
   }
 
   @Query(() => Subject)
-  async findOneSubject(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<Subject> {
+  subject(@Args('id', { type: () => Int }) id: number): Promise<Subject> {
     return this.subjectsService.findOne(id);
   }
   @Query(() => [Subject])
-  async findManySubject(): Promise<Subject[]> {
+  subjects(): Promise<Subject[]> {
     return this.subjectsService.find();
   }
 

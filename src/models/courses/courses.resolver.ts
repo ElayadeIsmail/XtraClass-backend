@@ -16,7 +16,7 @@ export class CoursesResolver {
     return this.coursesService.find();
   }
   @Mutation(() => Course)
-  createCourse(@Args('inputs') inputs: CreateCourseInput): Promise<Course> {
+  addCourse(@Args('inputs') inputs: CreateCourseInput): Promise<Course> {
     return this.coursesService.createCourse(inputs);
   }
 

@@ -25,7 +25,7 @@ export class StudentsCoursesResolver {
     );
   }
   @Mutation(() => StudentCourse)
-  removeStudentCourse(
+  deletetudentCourse(
     @Args('studentCourseId', { type: () => Int }) studentCourseId: number,
   ) {
     return this.studentsCoursesService.removeStudentCourse(studentCourseId);

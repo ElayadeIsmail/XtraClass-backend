@@ -7,20 +7,16 @@ export class StudentsResolver {
   constructor(private readonly studentsService: StudentsService) {}
 
   @Mutation(() => Student)
-  async createStudent(
-    @Args('inputs') inputs: CreateStudentInputs,
-  ): Promise<Student> {
+  addStudent(@Args('inputs') inputs: CreateStudentInputs): Promise<Student> {
     return this.studentsService.createStudent(inputs);
   }
 
   @Query(() => Student)
-  findOneStudent(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<Student> {
+  student(@Args('id', { type: () => Int }) id: number): Promise<Student> {
     return this.studentsService.findOne(id);
   }
   @Query(() => [Student])
-  findStudents(): Promise<Student[]> {
+  students(): Promise<Student[]> {
     return this.studentsService.find();
   }
 

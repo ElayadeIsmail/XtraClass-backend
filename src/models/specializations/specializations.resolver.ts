@@ -16,13 +16,13 @@ export class SpecializationsResolver {
   }
 
   @Query(() => Specialization)
-  async findOneSpecialization(
+  async specialization(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<Specialization> {
     return this.specializationsService.findOne(id);
   }
   @Query(() => [Specialization])
-  async findManySpecialization(): Promise<Specialization[]> {
+  async Specializations(): Promise<Specialization[]> {
     return this.specializationsService.find();
   }
 

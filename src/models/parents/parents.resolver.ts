@@ -8,9 +8,7 @@ export class ParentsResolver {
   constructor(private readonly parentsService: ParentsService) {}
 
   @Mutation(() => Parent)
-  async createParent(
-    @Args('inputs') inputs: CreateParentInput,
-  ): Promise<Parent> {
+  async addParent(@Args('inputs') inputs: CreateParentInput): Promise<Parent> {
     return this.parentsService.createParent(inputs);
   }
 }

@@ -8,16 +8,16 @@ export class InstructorsResolver {
   constructor(private readonly instructorsService: InstructorsService) {}
 
   @Mutation(() => Instructor)
-  async createInstructor(@Args('inputs') inputs: CreateInstructorInputs) {
+  addInstructor(@Args('inputs') inputs: CreateInstructorInputs) {
     return this.instructorsService.createInstructor(inputs);
   }
 
   @Query(() => Instructor)
-  findOneInstructor(@Args('id', { type: () => Int }) id: number) {
+  instructor(@Args('id', { type: () => Int }) id: number) {
     return this.instructorsService.findOne(id);
   }
   @Query(() => [Instructor])
-  findInstructors() {
+  instructors() {
     return this.instructorsService.find();
   }
 

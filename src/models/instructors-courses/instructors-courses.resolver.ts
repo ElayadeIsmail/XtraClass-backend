@@ -15,7 +15,7 @@ export class InstructorsCoursesResolver {
   }
 
   @Mutation(() => InstructorCourse)
-  removeInstructorFromCourse(
+  deleteInstructorFromCourse(
     @Args('instructorCourseId', { type: () => Int }) instructorCourseId: number,
   ) {
     return this.instructorsCoursesService.removeInstructorFromCourse(
