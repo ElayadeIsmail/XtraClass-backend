@@ -62,8 +62,12 @@ export class GroupsService {
     }
     return group;
   }
-  find(): Promise<Group[]> {
-    return this.prisma.group.findMany();
+  find({ courseId }: { courseId: number }): Promise<Group[]> {
+    return this.prisma.group.findMany({
+      where: {
+        courseId,
+      },
+    });
   }
   async delete(id: number): Promise<Group> {
     const group = await this.prisma.group.findUnique({
