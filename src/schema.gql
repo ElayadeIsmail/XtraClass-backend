@@ -229,7 +229,7 @@ type Query {
   specialization(id: Int!): Specialization!
   specializations: [Specialization!]!
   student(id: Int!): Student!
-  students: [Student!]!
+  students(args: StudentFilterInputs!): [Student!]!
   subject(id: Int!): Subject!
   subjects: [Subject!]!
 }
@@ -276,6 +276,15 @@ type StudentCourse {
   price: Float!
   student: Student
   studentId: Int!
+}
+
+input StudentFilterInputs {
+  gradeId: Int
+  levelId: Int
+  limit: Int = 20
+  name: String = ""
+  page: Int = 1
+  specializationId: Int
 }
 
 type StudentsCount {

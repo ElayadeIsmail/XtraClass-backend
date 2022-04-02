@@ -3,11 +3,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaPromise, Role } from '@prisma/client';
+import { Prisma, PrismaPromise, Role } from '@prisma/client';
 import slugify from 'slugify';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { CreateStudentInputs } from './dto/create-student.inputs';
+import { StudentFilterInputs } from './dto/students-filter-inputs';
 import { Student } from './Student';
 
 @Injectable()
@@ -147,8 +148,20 @@ export class StudentsService {
     return student;
   }
 
-  async find(): Promise<Student[]> {
+  async find(args: StudentFilterInputs): Promise<Student[]> {
+    const { limit, name, page, ...rest } = args;
+    const where: Prisma.StudentWhereInput = { ...rest };
+    where.user = {
+      username: {
+        contains: name,
+        mode: 'insensitive',
+      },
+    };
+    const skip = limit == -1 ? undefined : (page - 1) * limit;
     return this.prisma.student.findMany({
+      where,
+      skip,
+      take: limit == -1 ? undefined : limit,
       include: {
         _count: true,
         user: true,
