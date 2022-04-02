@@ -17,8 +17,11 @@ export class GroupsResolver {
     return this.groupsService.findOne(id);
   }
   @Query(() => [Group])
-  groups(@Args('courseId', { type: () => Int }) courseId: number) {
-    return this.groupsService.find({ courseId });
+  groups(
+    @Args('courseId', { type: () => Int }) courseId: number,
+    @Args('name', { nullable: true, defaultValue: '' }) name: string,
+  ) {
+    return this.groupsService.find({ courseId, name });
   }
   @Mutation(() => Group)
   deleteGroup(@Args('id', { type: () => Int }) id: number) {

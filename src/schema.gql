@@ -221,7 +221,7 @@ type Query {
   grade(id: Int!): Grade!
   grades: [Grade!]!
   group(id: Int!): Group!
-  groups(courseId: Int!): [Group!]!
+  groups(courseId: Int!, name: String = ""): [Group!]!
   hello: String!
   instructor(id: Int!): Instructor!
   instructors(args: InstructorFilterInputs!): [Instructor!]!

@@ -62,10 +62,20 @@ export class GroupsService {
     }
     return group;
   }
-  find({ courseId }: { courseId: number }): Promise<Group[]> {
+  find({
+    courseId,
+    name,
+  }: {
+    courseId: number;
+    name: string;
+  }): Promise<Group[]> {
     return this.prisma.group.findMany({
       where: {
         courseId,
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
       },
     });
   }
