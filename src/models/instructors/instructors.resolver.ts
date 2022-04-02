@@ -1,5 +1,6 @@
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateInstructorInputs } from './dtos/create-instructor-inputs';
+import { InstructorFilterInputs } from './dtos/instructor-filter-inputs';
 import { Instructor } from './Instructor';
 import { InstructorsService } from './instructors.service';
 
@@ -17,8 +18,8 @@ export class InstructorsResolver {
     return this.instructorsService.findOne(id);
   }
   @Query(() => [Instructor])
-  instructors() {
-    return this.instructorsService.find();
+  instructors(@Args('args') args: InstructorFilterInputs) {
+    return this.instructorsService.find(args);
   }
 
   @Mutation(() => Instructor)

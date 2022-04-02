@@ -35,12 +35,11 @@ export class CoursesService {
   find(args: CourseFilterInputs): Promise<Course[]> {
     const { name, page, limit, ...rest } = args;
     const where: Prisma.CourseWhereInput = { ...rest };
-    if (name) {
-      where.name = {
-        contains: args.name,
-        mode: 'insensitive',
-      };
-    }
+    where.name = {
+      contains: name,
+      mode: 'insensitive',
+    };
+
     const skip = limit == -1 ? undefined : (page - 1) * limit;
     return this.prisma.course.findMany({
       where,

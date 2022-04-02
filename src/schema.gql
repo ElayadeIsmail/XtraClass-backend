@@ -40,7 +40,7 @@ input CourseFilterInputs {
   gradeId: Int
   levelId: Int
   limit: Int = 20
-  name: String
+  name: String = ""
   page: Int = 1
   specializationId: Int
   subjectId: Int
@@ -163,6 +163,12 @@ type InstructorCourse {
   percentage: Float!
 }
 
+input InstructorFilterInputs {
+  limit: Int = 20
+  name: String = ""
+  page: Int = 1
+}
+
 type Level {
   grade: Grade
   gradeId: Int!
@@ -218,7 +224,7 @@ type Query {
   groups(courseId: Int!): [Group!]!
   hello: String!
   instructor(id: Int!): Instructor!
-  instructors: [Instructor!]!
+  instructors(args: InstructorFilterInputs!): [Instructor!]!
   levels(gradeId: Int!): [Grade!]!
   specialization(id: Int!): Specialization!
   specializations: [Specialization!]!
