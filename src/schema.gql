@@ -36,6 +36,16 @@ type Course {
   subjectId: Int!
 }
 
+input CourseFilterInputs {
+  gradeId: Int
+  levelId: Int
+  limit: Int = 20
+  name: String
+  page: Int = 1
+  specializationId: Int
+  subjectId: Int
+}
+
 input CreateCourseInput {
   gradeId: Int!
   levelId: Int!
@@ -64,7 +74,6 @@ input CreateInstructorInputs {
   lastName: String!
   phone: String!
   photo: String
-  username: String!
 }
 
 input CreateParentInput {
@@ -76,7 +85,6 @@ input CreateParentInput {
   phone: String!
   photo: String
   studentId: Int!
-  username: String!
 }
 
 input CreateStudentInputs {
@@ -90,7 +98,6 @@ input CreateStudentInputs {
   phone: String!
   photo: String
   specializationId: Int
-  username: String!
 }
 
 """
@@ -204,11 +211,11 @@ type Parent {
 
 type Query {
   course(id: Int!): Course!
-  courses: [Course!]!
+  courses(args: CourseFilterInputs!): [Course!]!
   grade(id: Int!): Grade!
   grades: [Grade!]!
   group(id: Int!): Group!
-  groups: [Group!]!
+  groups(courseId: Int!): [Group!]!
   hello: String!
   instructor(id: Int!): Instructor!
   instructors: [Instructor!]!

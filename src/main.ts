@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -12,6 +13,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
+  app.useGlobalPipes(new ValidationPipe());
   const prismaService: PrismaService = app.get(PrismaService);
   prismaService.enableShutdownHooks(app);
   await app.listen(5000, '0.0.0.0');

@@ -3,8 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { Course } from './Course';
+import { CourseFilterInputs } from './dto/course-filter-inputs';
 import { CreateCourseInput } from './dto/create-course-inputs';
 
 @Injectable()
@@ -30,14 +32,26 @@ export class CoursesService {
     return course;
   }
 
-  find(): Promise<Course[]> {
+  find(args: CourseFilterInputs): Promise<Course[]> {
+    const { name, page, limit, ...rest } = args;
+    const where: Prisma.CourseWhereInput = { ...rest };
+    if (name) {
+      where.name = {
+        contains: args.name,
+        mode: 'insensitive',
+      };
+    }
+    const skip = limit == -1 ? undefined : (page - 1) * limit;
     return this.prisma.course.findMany({
+      where,
       include: {
         grade: true,
         level: true,
         subject: true,
         specialization: true,
       },
+      take: limit == -1 ? undefined : limit,
+      skip,
     });
   }
 

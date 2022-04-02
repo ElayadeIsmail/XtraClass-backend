@@ -1,6 +1,7 @@
 import { Args, Float, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Course } from './Course';
 import { CoursesService } from './courses.service';
+import { CourseFilterInputs } from './dto/course-filter-inputs';
 import { CreateCourseInput } from './dto/create-course-inputs';
 
 @Resolver(() => Course)
@@ -12,8 +13,10 @@ export class CoursesResolver {
     return this.coursesService.findOne(id);
   }
   @Query(() => [Course])
-  courses(): Promise<Course[]> {
-    return this.coursesService.find();
+  courses(@Args('args') args: CourseFilterInputs): Promise<Course[]> {
+    console.log('Aaaargs', args);
+
+    return this.coursesService.find(args);
   }
   @Mutation(() => Course)
   addCourse(@Args('inputs') inputs: CreateCourseInput): Promise<Course> {
