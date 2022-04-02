@@ -3,7 +3,7 @@ import { CreateStudentInputs } from './dto/create-student.inputs';
 import { StudentFilterInputs } from './dto/students-filter-inputs';
 import { Student } from './Student';
 import { StudentsService } from './students.service';
-@Resolver()
+@Resolver(() => Student)
 export class StudentsResolver {
   constructor(private readonly studentsService: StudentsService) {}
 

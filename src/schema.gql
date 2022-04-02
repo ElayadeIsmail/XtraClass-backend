@@ -225,7 +225,7 @@ type Query {
   hello: String!
   instructor(id: Int!): Instructor!
   instructors(args: InstructorFilterInputs!): [Instructor!]!
-  levels(gradeId: Int!): [Grade!]!
+  levels(gradeId: Int!): [Level!]!
   specialization(id: Int!): Specialization!
   specializations: [Specialization!]!
   student(id: Int!): Student!

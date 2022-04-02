@@ -2,7 +2,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Specialization } from './Specialization';
 import { SpecializationsService } from './specializations.service';
 
-@Resolver()
+@Resolver(() => Specialization)
 export class SpecializationsResolver {
   constructor(
     private readonly specializationsService: SpecializationsService,

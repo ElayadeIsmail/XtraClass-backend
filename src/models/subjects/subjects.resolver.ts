@@ -2,7 +2,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Subject } from './Subject';
 import { SubjectsService } from './subjects.service';
 
-@Resolver()
+@Resolver(() => Subject)
 export class SubjectsResolver {
   constructor(private readonly subjectsService: SubjectsService) {}
 

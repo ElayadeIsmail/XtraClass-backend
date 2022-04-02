@@ -2,9 +2,10 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateGradeInputs } from './dto/create-grade.inputs';
 import { Grade } from './Grade';
 import { GradesService } from './grades.service';
+import { Level } from './Level';
 import { LevelsService } from './levels.service';
 
-@Resolver()
+@Resolver(() => Grade)
 export class GradesResolver {
   constructor(
     private readonly gradesService: GradesService,
@@ -24,7 +25,7 @@ export class GradesResolver {
   grades() {
     return this.gradesService.find();
   }
-  @Query(() => [Grade])
+  @Query(() => [Level])
   levels(@Args('gradeId', { type: () => Int }) gradeId: number) {
     return this.levelsService.find(gradeId);
   }
