@@ -26,6 +26,12 @@ input AddStudentToCourse {
   studentId: Int!
 }
 
+input CommonFindInputs {
+  limit: Int = 20
+  name: String = ""
+  page: Int = 1
+}
+
 type Count {
   groups: Int
   instructors: Int
@@ -212,6 +218,7 @@ type Mutation {
   deleteStudent(id: Int!): Student!
   deleteSubject(id: Int!): Subject!
   deletetudentCourse(studentCourseId: Int!): StudentCourse!
+  removeStaffMember(id: Int!): Staff!
   removeStudentFromGroup(inputs: RemoveStudentFromGroupInputs!): Student!
   removeStudentsFromGroup(inputs: RemoveStudentsFromGroupInputs!): Group!
   updateCourseName(courseId: Int!, name: String!): Course!
@@ -240,6 +247,8 @@ type Query {
   levels(gradeId: Int!): [Level!]!
   specialization(id: Int!): Specialization!
   specializations: [Specialization!]!
+  staffMember(id: Int!): Staff!
+  staffMembers(args: CommonFindInputs!): Staff!
   student(id: Int!): Student!
   students(args: StudentFilterInputs!): [Student!]!
   subject(id: Int!): Subject!
