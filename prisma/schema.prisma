@@ -35,12 +35,22 @@ model User {
   student           Student?
   parent            Parent?
   instructor        Instructor?
+  staff             Staff?
   updatedAt         DateTime    @updatedAt
   createdAt         DateTime    @default(now())
 
 
   @@unique([firstName, lastName], name: "fullName")
   @@map("users")
+}
+
+model Staff {
+  id     Int   @id @default(autoincrement())
+  userId Int   @unique
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  salary Float
+
+  @@map("staff")
 }
 
 model Student {

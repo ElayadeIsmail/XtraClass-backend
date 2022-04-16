@@ -10,6 +10,7 @@ import { InstructorsGroupsModule } from './models/instructors-groups/instructors
 import { InstructorsModule } from './models/instructors/instructors.module';
 import { ParentsModule } from './models/parents/parents.module';
 import { SpecializationsModule } from './models/specializations/specializations.module';
+import { StaffModule } from './models/staff/staff.module';
 import { StudentsCoursesModule } from './models/students-courses/students-courses.module';
 import { StudentsGroupsModule } from './models/students-groups/students-groups.module';
 import { StudentsModule } from './models/students/students.module';
@@ -37,6 +38,7 @@ import { PrismaService } from './services/prisma/prisma.service';
     InstructorsCoursesModule,
     SpecializationsModule,
     SubjectsModule,
+    StaffModule,
   ],
   providers: [PrismaService],
 })
