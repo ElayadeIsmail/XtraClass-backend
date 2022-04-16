@@ -26,6 +26,13 @@ input AddStudentToCourse {
   studentId: Int!
 }
 
+type CalendarSession {
+  day: days!
+  from: String!
+  groupId: Int!
+  to: String!
+}
+
 input CommonFindInputs {
   limit: Int = 20
   name: String = ""
@@ -61,6 +68,14 @@ input CourseFilterInputs {
   page: Int = 1
   specializationId: Int
   subjectId: Int
+}
+
+input CreateCalendarSession {
+  day: days!
+  from: String!
+  groupId: Int!
+  sale: String!
+  to: String!
 }
 
 input CreateCourseInput {
@@ -194,6 +209,7 @@ type Level {
 }
 
 type Mutation {
+  addCalendar(inputs: [CreateCalendarSession!]!): [CalendarSession!]!
   addCourse(inputs: CreateCourseInput!): Course!
   addGrade(inputs: CreateGradeInputs!): Grade!
   addGroup(inputs: CreateGroupInputs!): Group!
@@ -218,11 +234,13 @@ type Mutation {
   deleteStudent(id: Int!): Student!
   deleteSubject(id: Int!): Subject!
   deletetudentCourse(studentCourseId: Int!): StudentCourse!
+  removeGroupSession(sessionId: Float!): CalendarSession!
   removeStaffMember(id: Int!): Staff!
   removeStudentFromGroup(inputs: RemoveStudentFromGroupInputs!): Student!
   removeStudentsFromGroup(inputs: RemoveStudentsFromGroupInputs!): Group!
   updateCourseName(courseId: Int!, name: String!): Course!
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
+  updateGroupSession(inputs: UpdateCalendarSession!, sessionId: Float!): CalendarSession!
   updateInstructorCoursePercentage(instructorCourseId: Int!, percentage: Float!): InstructorCourse!
   updateStudentCourse(price: Float!, studentCourseId: Int!): StudentCourse!
   updateUserInformation(inputs: UpdateUserInputs!, userId: Int!): User!
@@ -325,6 +343,13 @@ type Subject {
   name: String!
 }
 
+input UpdateCalendarSession {
+  day: days!
+  from: String!
+  sale: String!
+  to: String!
+}
+
 input UpdateUserInputs {
   address: String
   phone: String
@@ -368,4 +393,14 @@ input changeStudentsGroup {
   newGroupId: Int!
   oldGroupId: Int!
   studentsIds: [Int!]!
+}
+
+enum days {
+  FRIDAY
+  MONDAY
+  SATURDAYS
+  SUNDAY
+  THURSDAY
+  TUESDAY
+  WEDNESDAY
 }

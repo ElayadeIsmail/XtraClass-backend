@@ -18,6 +18,16 @@ enum Role {
   Parent
 }
 
+enum Days {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAYS
+}
+
 model User {
   id                Int         @id @default(autoincrement())
   username          String      @unique
@@ -185,6 +195,19 @@ model Group {
   instructorId Int
   instructor   Instructor @relation(fields: [instructorId], references: [id])
   students     Student[]
+  calendars    Calendar[]
 
   @@map("groups")
+}
+
+model Calendar {
+  id      Int    @id @default(autoincrement())
+  groupId Int
+  group   Group  @relation(fields: [groupId], references: [id])
+  day     Days
+  from    String
+  to      String
+  sale    String
+
+  @@map("calendars")
 }

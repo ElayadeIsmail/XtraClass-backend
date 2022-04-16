@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
+import { CalendarModule } from './models/calendar/calendar.module';
 import { CoursesModule } from './models/courses/courses.module';
 import { GradesModule } from './models/grades/grades.module';
 import { GroupsModule } from './models/groups/groups.module';
@@ -39,6 +40,7 @@ import { PrismaService } from './services/prisma/prisma.service';
     SpecializationsModule,
     SubjectsModule,
     StaffModule,
+    CalendarModule,
   ],
   providers: [PrismaService],
 })
