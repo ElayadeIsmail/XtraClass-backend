@@ -225,6 +225,7 @@ type Mutation {
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
   updateInstructorCoursePercentage(instructorCourseId: Int!, percentage: Float!): InstructorCourse!
   updateStudentCourse(price: Float!, studentCourseId: Int!): StudentCourse!
+  updateUserInformation(inputs: UpdateUserInputs!, userId: Int!): User!
 }
 
 type Parent {
@@ -241,7 +242,6 @@ type Query {
   grades: [Grade!]!
   group(id: Int!): Group!
   groups(courseId: Int!, name: String = ""): [Group!]!
-  hello: String!
   instructor(id: Int!): Instructor!
   instructors(args: InstructorFilterInputs!): [Instructor!]!
   levels(gradeId: Int!): [Level!]!
@@ -323,6 +323,12 @@ type StudentsCount {
 type Subject {
   id: Int!
   name: String!
+}
+
+input UpdateUserInputs {
+  address: String
+  phone: String
+  photo: String
 }
 
 type User {

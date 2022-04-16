@@ -1,8 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import slugify from 'slugify';
 import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { CreateUserInputs } from './dtos/create-user.inputs';
+import { UpdateUserInputs } from './dtos/update-user-inputs';
+import { User } from './User';
 
 @Injectable()
 export class UsersService {
@@ -66,5 +72,31 @@ export class UsersService {
       generatedPassword,
       password: hashedPassword,
     };
+  }
+
+  async updateUserInformation(
+    id: number,
+    inputs: UpdateUserInputs,
+  ): Promise<User> {
+    const { address, phone, photo } = inputs;
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
+    // @TODO add check for phone number
+    return this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        phone: phone ?? user.phone,
+        address: address ?? user.address,
+        photo: photo ?? user.photo,
+      },
+    });
   }
 }
