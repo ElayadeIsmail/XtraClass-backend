@@ -8,6 +8,17 @@ input AddInstructorCourseInputs {
   percentage: Float!
 }
 
+input AddStaffInput {
+  address: String!
+  birthDate: DateTime!
+  cin: String
+  firstName: String!
+  lastName: String!
+  phone: String!
+  photo: String
+  salary: Float!
+}
+
 input AddStudentToCourse {
   courseId: Int!
   groupId: Int!
@@ -183,6 +194,7 @@ type Mutation {
   addInstructor(inputs: CreateInstructorInputs!): Instructor!
   addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
   addParent(inputs: CreateParentInput!): Parent!
+  addStaffMember(inputs: AddStaffInput!): Staff!
   addStudent(inputs: CreateStudentInputs!): Student!
   addStudentToCourse(inputs: AddStudentToCourse!): StudentCourse!
   addStudentToGroup(inputs: addStudentToGroup!): Student!
@@ -248,6 +260,13 @@ type Specialization {
   id: Int!
   name: String!
   students: [Student!]
+}
+
+type Staff {
+  id: Int!
+  salary: Float!
+  user: User
+  userId: Int!
 }
 
 type Student {

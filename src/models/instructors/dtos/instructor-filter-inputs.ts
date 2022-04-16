@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
-import { PAGINATION_LIMIT } from 'src/constants';
+import { PAGINATION_LIMIT } from 'src/common/constants';
 
 @InputType()
 export class InstructorFilterInputs {

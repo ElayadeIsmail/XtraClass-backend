@@ -4,61 +4,20 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, Role } from '@prisma/client';
-import slugify from 'slugify';
-import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
+import { UsersService } from '../users/users.service';
 import { CreateInstructorInputs } from './dtos/create-instructor-inputs';
 import { InstructorFilterInputs } from './dtos/instructor-filter-inputs';
 import { Instructor } from './Instructor';
 
 @Injectable()
 export class InstructorsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly userService: UsersService,
+  ) {}
   async createInstructor(inputs: CreateInstructorInputs): Promise<Instructor> {
-    const username = slugify(inputs.firstName + ' ' + inputs.lastName);
-    const nameAlreadyExistPromise = this.prisma.user.findUnique({
-      where: {
-        username,
-      },
-    });
-    const phoneAlreadyExistPromise = this.prisma.user.findUnique({
-      where: {
-        phone: inputs.phone,
-      },
-    });
-    if (inputs.cin) {
-      const cinAlreadyExist = await this.prisma.user.findUnique({
-        where: {
-          cin: inputs?.cin,
-        },
-      });
-      if (cinAlreadyExist) {
-        throw new BadRequestException('CIN already exist');
-      }
-    }
-    const fullNameAlreadyExistPromise = this.prisma.user.findUnique({
-      where: {
-        fullName: {
-          firstName: inputs.firstName,
-          lastName: inputs.lastName,
-        },
-      },
-    });
-    // check if username of phone number in use
-    const checksResult = await Promise.all([
-      nameAlreadyExistPromise,
-      phoneAlreadyExistPromise,
-      fullNameAlreadyExistPromise,
-    ]);
-    const fields = ['username', 'phone', 'firstName and lastName'];
-    checksResult.forEach((user, idx) => {
-      if (user) {
-        throw new BadRequestException(`${fields[idx]} Already exist`);
-      }
-    });
-
-    const generatedPassword = PasswordManager.generatePassword();
-    const hashedPassword = await PasswordManager.hash(generatedPassword);
+    const userInputs = await this.userService.validateUserInputs(inputs);
     return this.prisma.instructor.create({
       include: {
         user: true,
@@ -66,10 +25,7 @@ export class InstructorsService {
       data: {
         user: {
           create: {
-            ...inputs,
-            username,
-            password: hashedPassword,
-            generatedPassword,
+            ...userInputs,
             role: Role.Instructor,
           },
         },

@@ -4,60 +4,24 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, PrismaPromise, Role } from '@prisma/client';
-import slugify from 'slugify';
-import { PasswordManager } from 'src/services/password.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
+import { UsersService } from '../users/users.service';
 import { CreateStudentInputs } from './dto/create-student.inputs';
 import { StudentFilterInputs } from './dto/students-filter-inputs';
 import { Student } from './Student';
 
 @Injectable()
 export class StudentsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly userService: UsersService,
+  ) {}
 
   async createStudent(inputs: CreateStudentInputs): Promise<Student> {
     const { levelId, gradeId, specializationId, ...userInput } = inputs;
-    const username = slugify(inputs.firstName + ' ' + inputs.lastName);
-    const nameAlreadyExistPromise = this.prisma.user.findUnique({
-      where: {
-        username,
-      },
-    });
-    const phoneAlreadyExistPromise = this.prisma.user.findUnique({
-      where: {
-        phone: userInput.phone,
-      },
-    });
-    if (userInput.cin) {
-      const cinAlreadyExist = await this.prisma.user.findUnique({
-        where: {
-          cin: userInput?.cin,
-        },
-      });
-      if (cinAlreadyExist) {
-        throw new BadRequestException('CIN already exist');
-      }
-    }
-    const fullNameAlreadyExistPromise = this.prisma.user.findUnique({
-      where: {
-        fullName: {
-          firstName: userInput.firstName,
-          lastName: userInput.lastName,
-        },
-      },
-    });
-    // check if username of phone number in use
-    const checksResult = await Promise.all([
-      nameAlreadyExistPromise,
-      phoneAlreadyExistPromise,
-      fullNameAlreadyExistPromise,
-    ]);
-    const fields = ['username', 'phone', 'firstName and lastName'];
-    checksResult.forEach((user, idx) => {
-      if (user) {
-        throw new BadRequestException(`${fields[idx]} Already exist`);
-      }
-    });
+    const validUserInputs = await this.userService.validateUserInputs(
+      userInput,
+    );
     const levelPromise = this.prisma.level.findUnique({
       where: {
         id: levelId,
@@ -86,8 +50,6 @@ export class StudentsService {
         throw new BadRequestException('specialization does not exist');
       }
     }
-    const generatedPassword = PasswordManager.generatePassword();
-    const hashedPassword = await PasswordManager.hash(generatedPassword);
     return this.prisma.student.create({
       include: {
         user: true,
@@ -113,10 +75,7 @@ export class StudentsService {
         },
         user: {
           create: {
-            ...userInput,
-            username,
-            password: hashedPassword,
-            generatedPassword,
+            ...validUserInputs,
             role: Role.Student,
           },
         },
