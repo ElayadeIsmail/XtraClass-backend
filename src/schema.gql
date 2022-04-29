@@ -213,6 +213,7 @@ type Mutation {
   addCourse(inputs: CreateCourseInput!): Course!
   addGrade(inputs: CreateGradeInputs!): Grade!
   addGroup(inputs: CreateGroupInputs!): Group!
+  addGroupSession(inputs: CreateCalendarSession!): [CalendarSession!]!
   addInstructor(inputs: CreateInstructorInputs!): Instructor!
   addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
   addParent(inputs: CreateParentInput!): Parent!
@@ -254,6 +255,7 @@ type Parent {
 }
 
 type Query {
+  calendar: [CalendarSession!]!
   course(id: Int!): Course!
   courses(args: CourseFilterInputs!): [Course!]!
   grade(id: Int!): Grade!

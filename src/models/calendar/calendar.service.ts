@@ -14,6 +14,17 @@ export class CalendarService {
       data: inputs,
     });
   }
+  async createOne(inputs: CreateCalendarSession) {
+    // ! TODO check if groupId is Valid
+    // ! TODO check if the sale is empty
+    return this.prisma.calendar.create({
+      data: inputs,
+    });
+  }
+
+  async find() {
+    return this.prisma.calendar.findMany({});
+  }
 
   async update(id: number, inputs: UpdateCalendarSession) {
     const calendarSession = await this.prisma.calendar.findUnique({

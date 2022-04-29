@@ -188,14 +188,14 @@ model InstructorCourse {
 }
 
 model Group {
-  id           Int        @id @default(autoincrement())
-  name         String     @unique
-  courseId     Int
-  course       Course     @relation(fields: [courseId], references: [id])
-  instructorId Int
-  instructor   Instructor @relation(fields: [instructorId], references: [id])
-  students     Student[]
-  calendars    Calendar[]
+  id               Int        @id @default(autoincrement())
+  name             String     @unique
+  courseId         Int
+  course           Course     @relation(fields: [courseId], references: [id])
+  instructorId     Int
+  instructor       Instructor @relation(fields: [instructorId], references: [id])
+  students         Student[]
+  calendarSessions Calendar[]
 
   @@map("groups")
 }
