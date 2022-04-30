@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { Days } from '@prisma/client';
 
 // registerEnumType(Days, {
@@ -13,6 +13,6 @@ export class UpdateCalendarSession {
   from: string;
   @Field()
   to: string;
-  @Field()
-  sale: string;
+  @Field(() => Int)
+  saleId: number;
 }

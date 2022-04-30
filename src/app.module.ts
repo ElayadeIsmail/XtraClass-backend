@@ -19,7 +19,6 @@ import { StudentsGroupsModule } from './models/students-groups/students-groups.m
 import { StudentsModule } from './models/students/students.module';
 import { SubjectsModule } from './models/subjects/subjects.module';
 import { UsersModule } from './models/users/users.module';
-import { PrismaService } from './services/prisma/prisma.service';
 
 @Module({
   imports: [
@@ -46,6 +45,5 @@ import { PrismaService } from './services/prisma/prisma.service';
     PaymentsModule,
     SalesModule,
   ],
-  providers: [PrismaService],
 })
 export class AppModule {}

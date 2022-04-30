@@ -74,7 +74,7 @@ input CreateCalendarSession {
   day: days!
   from: String!
   groupId: Int!
-  sale: String!
+  saleId: Int!
   to: String!
 }
 
@@ -348,7 +348,7 @@ type Subject {
 input UpdateCalendarSession {
   day: days!
   from: String!
-  sale: String!
+  saleId: Int!
   to: String!
 }
 

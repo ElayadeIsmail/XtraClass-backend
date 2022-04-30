@@ -11,6 +11,6 @@ export class CreateCalendarSession {
   from: string;
   @Field()
   to: string;
-  @Field()
-  sale: string;
+  @Field(() => Int)
+  saleId: number;
 }
