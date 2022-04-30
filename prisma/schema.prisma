@@ -211,14 +211,14 @@ model Sale {
 }
 
 model Calendar {
-  id      Int    @id @default(autoincrement())
+  id      Int      @id @default(autoincrement())
   groupId Int
-  group   Group  @relation(fields: [groupId], references: [id])
+  group   Group    @relation(fields: [groupId], references: [id])
   day     Days
-  from    String
-  to      String
+  from    DateTime @db.Time()
+  to      DateTime @db.Time()
   saleId  Int
-  sale    Sale   @relation(fields: [saleId], references: [id])
+  sale    Sale     @relation(fields: [saleId], references: [id])
 
   @@map("calendars")
 }
@@ -230,8 +230,8 @@ model OutgoingPayments {
   instructor   Instructor? @relation(fields: [instructorId], references: [id])
   staffId      Int?
   staff        Staff?      @relation(fields: [staffId], references: [id])
-  date         DateTime
-  payedAt      DateTime
+  date         DateTime    @db.Date
+  payedAt      DateTime    @default(now())
   payments     Payments[]
 
   @@unique([instructorId, staffId, date])
@@ -245,8 +245,8 @@ model IncomesPayments {
   student   Student    @relation(fields: [studentId], references: [id])
   courseId  Int
   course    Course     @relation(fields: [courseId], references: [id])
-  date      DateTime
-  payedAt   DateTime
+  date      DateTime   @db.Date
+  payedAt   DateTime   @default(now())
   payments  Payments[]
 
 
