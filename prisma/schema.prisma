@@ -60,25 +60,27 @@ model Staff {
   user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   salary Float
 
+  payments OutgoingPayments[]
   @@map("staff")
 }
 
 model Student {
-  id               Int             @id @default(autoincrement())
-  userId           Int             @unique
-  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id               Int               @id @default(autoincrement())
+  userId           Int               @unique
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   parentId         Int?
-  parent           Parent?         @relation(fields: [parentId], references: [id], onDelete: Restrict)
+  parent           Parent?           @relation(fields: [parentId], references: [id], onDelete: Restrict)
   gradeId          Int
-  grade            Grade           @relation(fields: [gradeId], references: [id], onDelete: Restrict)
+  grade            Grade             @relation(fields: [gradeId], references: [id], onDelete: Restrict)
   levelId          Int
-  level            Level           @relation(fields: [levelId], references: [id], onDelete: Restrict)
+  level            Level             @relation(fields: [levelId], references: [id], onDelete: Restrict)
   specializationId Int?
-  specialization   Specialization? @relation(fields: [specializationId], references: [id], onDelete: Restrict)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  specialization   Specialization?   @relation(fields: [specializationId], references: [id], onDelete: Restrict)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
   courses          StudentCourse[]
   groups           Group[]
+  payments         IncomesPayments[]
 
   @@map("students")
 }
@@ -149,6 +151,7 @@ model Course {
   instructors      InstructorCourse[]
   groups           Group[]
 
+  payments IncomesPayments[]
   @@map("courses")
 }
 
@@ -165,11 +168,12 @@ model StudentCourse {
 }
 
 model Instructor {
-  id      Int                @id @default(autoincrement())
-  userId  Int                @unique
-  user    User               @relation(fields: [userId], references: [id])
-  courses InstructorCourse[]
-  groups  Group[]
+  id       Int                @id @default(autoincrement())
+  userId   Int                @unique
+  user     User               @relation(fields: [userId], references: [id])
+  courses  InstructorCourse[]
+  groups   Group[]
+  payments OutgoingPayments[]
 
   @@map("instructors")
 }
@@ -200,6 +204,12 @@ model Group {
   @@map("groups")
 }
 
+model Sale {
+  id       Int        @id @default(autoincrement())
+  name     String     @unique
+  sessions Calendar[]
+}
+
 model Calendar {
   id      Int    @id @default(autoincrement())
   groupId Int
@@ -207,7 +217,47 @@ model Calendar {
   day     Days
   from    String
   to      String
-  sale    String
+  saleId  Int
+  sale    Sale   @relation(fields: [saleId], references: [id])
 
   @@map("calendars")
+}
+
+model OutgoingPayments {
+  id           Int         @id @default(autoincrement())
+  amount       Float
+  instructorId Int?
+  instructor   Instructor? @relation(fields: [instructorId], references: [id])
+  staffId      Int?
+  staff        Staff?      @relation(fields: [staffId], references: [id])
+  date         DateTime
+  payedAt      DateTime
+  payments     Payments[]
+
+  @@unique([instructorId, staffId, date])
+  @@map("outgoing_payments")
+}
+
+model IncomesPayments {
+  id        Int        @id @default(autoincrement())
+  amount    Float
+  studentId Int
+  student   Student    @relation(fields: [studentId], references: [id])
+  courseId  Int
+  course    Course     @relation(fields: [courseId], references: [id])
+  date      DateTime
+  payedAt   DateTime
+  payments  Payments[]
+
+
+  @@unique([studentId, courseId, date])
+  @@map("incomes_payments")
+}
+
+model Payments {
+  id                Int               @id @default(autoincrement())
+  incomesPaymentId  Int?
+  incomesPayment    IncomesPayments?  @relation(fields: [incomesPaymentId], references: [id])
+  outgoingPaymentId Int?
+  outgoingPayment   OutgoingPayments? @relation(fields: [outgoingPaymentId], references: [id])
 }
