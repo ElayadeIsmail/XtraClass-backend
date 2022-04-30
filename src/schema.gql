@@ -217,6 +217,7 @@ type Mutation {
   addInstructor(inputs: CreateInstructorInputs!): Instructor!
   addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
   addParent(inputs: CreateParentInput!): Parent!
+  addSale(name: String!): Sale!
   addStaffMember(inputs: AddStaffInput!): Staff!
   addStudent(inputs: CreateStudentInputs!): Student!
   addStudentToCourse(inputs: AddStudentToCourse!): StudentCourse!
@@ -231,6 +232,7 @@ type Mutation {
   deleteGroup(id: Int!): Group!
   deleteInstructor(id: Int!): Instructor!
   deleteInstructorFromCourse(instructorCourseId: Int!): InstructorCourse!
+  deleteSale(id: Float!): Sale!
   deleteSpecialization(id: Int!): Specialization!
   deleteStudent(id: Int!): Student!
   deleteSubject(id: Int!): Subject!
@@ -243,6 +245,7 @@ type Mutation {
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
   updateGroupSession(inputs: UpdateCalendarSession!, sessionId: Float!): CalendarSession!
   updateInstructorCoursePercentage(instructorCourseId: Int!, percentage: Float!): InstructorCourse!
+  updateSale(id: Float!, name: String!): Sale!
   updateStudentCourse(price: Float!, studentCourseId: Int!): StudentCourse!
   updateUserInformation(inputs: UpdateUserInputs!, userId: Int!): User!
 }
@@ -265,6 +268,8 @@ type Query {
   instructor(id: Int!): Instructor!
   instructors(args: InstructorFilterInputs!): [Instructor!]!
   levels(gradeId: Int!): [Level!]!
+  sale(id: Int!): Sale!
+  sales: [Sale!]!
   specialization(id: Int!): Specialization!
   specializations: [Specialization!]!
   staffMember(id: Int!): Staff!
@@ -283,6 +288,11 @@ input RemoveStudentFromGroupInputs {
 input RemoveStudentsFromGroupInputs {
   groupId: Int!
   studentsId: [Int!]!
+}
+
+type Sale {
+  id: Int!
+  name: String!
 }
 
 type Specialization {
