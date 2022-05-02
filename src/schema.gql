@@ -27,9 +27,13 @@ input AddStudentToCourse {
 }
 
 type CalendarSession {
-  day: days!
+  day: Days!
   from: String!
+  group: Group
   groupId: Int!
+  id: Int!
+  sale: Sale!
+  saleId: Int!
   to: String!
 }
 
@@ -71,11 +75,11 @@ input CourseFilterInputs {
 }
 
 input CreateCalendarSession {
-  day: days!
-  from: String!
+  day: Days!
+  from: Float!
   groupId: Int!
-  sale: String!
-  to: String!
+  saleId: Int!
+  to: Float!
 }
 
 input CreateCourseInput {
@@ -136,6 +140,16 @@ input CreateStudentInputs {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+enum Days {
+  Friday
+  Monday
+  Saturday
+  Sunday
+  Thursday
+  Tuesday
+  Wednesday
+}
 
 type Grade {
   _count: GradeCount
@@ -209,14 +223,14 @@ type Level {
 }
 
 type Mutation {
-  addCalendar(inputs: [CreateCalendarSession!]!): [CalendarSession!]!
   addCourse(inputs: CreateCourseInput!): Course!
   addGrade(inputs: CreateGradeInputs!): Grade!
   addGroup(inputs: CreateGroupInputs!): Group!
-  addGroupSession(inputs: CreateCalendarSession!): [CalendarSession!]!
+  addGroupSession(inputs: CreateCalendarSession!): CalendarSession!
   addInstructor(inputs: CreateInstructorInputs!): Instructor!
   addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
   addParent(inputs: CreateParentInput!): Parent!
+  addSale(name: String!): Sale!
   addStaffMember(inputs: AddStaffInput!): Staff!
   addStudent(inputs: CreateStudentInputs!): Student!
   addStudentToCourse(inputs: AddStudentToCourse!): StudentCourse!
@@ -231,6 +245,7 @@ type Mutation {
   deleteGroup(id: Int!): Group!
   deleteInstructor(id: Int!): Instructor!
   deleteInstructorFromCourse(instructorCourseId: Int!): InstructorCourse!
+  deleteSale(id: Float!): Sale!
   deleteSpecialization(id: Int!): Specialization!
   deleteStudent(id: Int!): Student!
   deleteSubject(id: Int!): Subject!
@@ -243,6 +258,7 @@ type Mutation {
   updateCoursePrice(courseId: Int!, price: Float!, updateForStudents: Boolean!): Course!
   updateGroupSession(inputs: UpdateCalendarSession!, sessionId: Float!): CalendarSession!
   updateInstructorCoursePercentage(instructorCourseId: Int!, percentage: Float!): InstructorCourse!
+  updateSale(id: Float!, name: String!): Sale!
   updateStudentCourse(price: Float!, studentCourseId: Int!): StudentCourse!
   updateUserInformation(inputs: UpdateUserInputs!, userId: Int!): User!
 }
@@ -265,6 +281,8 @@ type Query {
   instructor(id: Int!): Instructor!
   instructors(args: InstructorFilterInputs!): [Instructor!]!
   levels(gradeId: Int!): [Level!]!
+  sale(id: Int!): Sale!
+  sales: [Sale!]!
   specialization(id: Int!): Specialization!
   specializations: [Specialization!]!
   staffMember(id: Int!): Staff!
@@ -283,6 +301,11 @@ input RemoveStudentFromGroupInputs {
 input RemoveStudentsFromGroupInputs {
   groupId: Int!
   studentsId: [Int!]!
+}
+
+type Sale {
+  id: Int!
+  name: String!
 }
 
 type Specialization {
@@ -346,10 +369,10 @@ type Subject {
 }
 
 input UpdateCalendarSession {
-  day: days!
-  from: String!
-  sale: String!
-  to: String!
+  day: Days!
+  from: Float!
+  saleId: Int!
+  to: Float!
 }
 
 input UpdateUserInputs {
@@ -395,14 +418,4 @@ input changeStudentsGroup {
   newGroupId: Int!
   oldGroupId: Int!
   studentsIds: [Int!]!
-}
-
-enum days {
-  FRIDAY
-  MONDAY
-  SATURDAYS
-  SUNDAY
-  THURSDAY
-  TUESDAY
-  WEDNESDAY
 }

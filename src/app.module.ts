@@ -11,6 +11,7 @@ import { InstructorsGroupsModule } from './models/instructors-groups/instructors
 import { InstructorsModule } from './models/instructors/instructors.module';
 import { ParentsModule } from './models/parents/parents.module';
 import { PaymentsModule } from './models/payments/payments.module';
+import { SalesModule } from './models/sales/sales.module';
 import { SpecializationsModule } from './models/specializations/specializations.module';
 import { StaffModule } from './models/staff/staff.module';
 import { StudentsCoursesModule } from './models/students-courses/students-courses.module';
@@ -18,7 +19,6 @@ import { StudentsGroupsModule } from './models/students-groups/students-groups.m
 import { StudentsModule } from './models/students/students.module';
 import { SubjectsModule } from './models/subjects/subjects.module';
 import { UsersModule } from './models/users/users.module';
-import { PrismaService } from './services/prisma/prisma.service';
 
 @Module({
   imports: [
@@ -43,7 +43,7 @@ import { PrismaService } from './services/prisma/prisma.service';
     StaffModule,
     CalendarModule,
     PaymentsModule,
+    SalesModule,
   ],
-  providers: [PrismaService],
 })
 export class AppModule {}
