@@ -14,8 +14,6 @@ export class CoursesResolver {
   }
   @Query(() => [Course])
   courses(@Args('args') args: CourseFilterInputs): Promise<Course[]> {
-    console.log('Aaaargs', args);
-
     return this.coursesService.find(args);
   }
   @Mutation(() => Course)

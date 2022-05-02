@@ -24,7 +24,7 @@ export class CalendarSession {
   @Field(() => Int)
   groupId: number;
   @Field(() => Group, { nullable: true })
-  group?: Group;
+  group: Group;
   @Field(() => Days)
   day: Days;
   @Field()

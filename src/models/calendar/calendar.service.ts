@@ -65,6 +65,33 @@ export class CalendarService {
     if (saleReserved) {
       throw new BadRequestException('Sale is reserved fin this time');
     }
+    const groupHasSession = await this.prisma.calendar.findFirst({
+      where: {
+        day: inputs.day,
+        groupId: inputs.groupId,
+        AND: [
+          {
+            OR: [
+              {
+                from: {
+                  gt: inputs.from,
+                  lte: inputs.to,
+                },
+              },
+              {
+                to: {
+                  gt: inputs.from,
+                  lte: inputs.to,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
+    if (groupHasSession) {
+      throw new BadRequestException('group has session between that time');
+    }
     return this.prisma.calendar.create({
       data: inputs,
     });
@@ -90,6 +117,7 @@ export class CalendarService {
   }
 
   async update(id: number, inputs: UpdateCalendarSession) {
+    // ! TODO add check for the new session
     const calendarSession = await this.prisma.calendar.findUnique({
       where: {
         id,
