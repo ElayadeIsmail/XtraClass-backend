@@ -19,13 +19,13 @@ enum Role {
 }
 
 enum Days {
-  SUNDAY
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAYS
+  Sunday
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
 }
 
 model User {
@@ -211,14 +211,14 @@ model Sale {
 }
 
 model Calendar {
-  id      Int      @id @default(autoincrement())
+  id      Int   @id @default(autoincrement())
   groupId Int
-  group   Group    @relation(fields: [groupId], references: [id])
+  group   Group @relation(fields: [groupId], references: [id])
   day     Days
-  from    DateTime @db.Time()
-  to      DateTime @db.Time()
+  from    Float
+  to      Float
   saleId  Int
-  sale    Sale     @relation(fields: [saleId], references: [id])
+  sale    Sale  @relation(fields: [saleId], references: [id])
 
   @@map("calendars")
 }

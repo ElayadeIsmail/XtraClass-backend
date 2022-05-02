@@ -12,14 +12,14 @@ export class CalendarResolver {
   calendar() {
     return this.calendarService.find();
   }
-  @Mutation(() => [CalendarSession])
-  addCalendar(
-    @Args('inputs', { type: () => [CreateCalendarSession] })
-    inputs: CreateCalendarSession[],
-  ) {
-    return this.calendarService.create(inputs);
-  }
-  @Mutation(() => [CalendarSession])
+  // @Mutation(() => [CalendarSession])
+  // addCalendar(
+  //   @Args('inputs', { type: () => [CreateCalendarSession] })
+  //   inputs: CreateCalendarSession[],
+  // ) {
+  //   return this.calendarService.create(inputs);
+  // }
+  @Mutation(() => CalendarSession)
   addGroupSession(
     @Args('inputs', { type: () => CreateCalendarSession })
     inputs: CreateCalendarSession,
