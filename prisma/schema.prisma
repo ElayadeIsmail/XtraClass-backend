@@ -230,11 +230,13 @@ model OutgoingPayments {
   instructor   Instructor? @relation(fields: [instructorId], references: [id])
   staffId      Int?
   staff        Staff?      @relation(fields: [staffId], references: [id])
-  date         DateTime    @db.Date
+  year         Int
+  month        Int         @db.SmallInt
   payedAt      DateTime    @default(now())
   payments     Payments[]
 
-  @@unique([instructorId, staffId, date])
+  @@unique([instructorId, staffId, month, year])
+  @@index([month])
   @@map("outgoing_payments")
 }
 
@@ -245,12 +247,14 @@ model IncomesPayments {
   student   Student    @relation(fields: [studentId], references: [id])
   courseId  Int
   course    Course     @relation(fields: [courseId], references: [id])
-  date      DateTime   @db.Date
+  year      Int
+  month     Int        @db.SmallInt
   payedAt   DateTime   @default(now())
   payments  Payments[]
 
 
-  @@unique([studentId, courseId, date])
+  @@unique([studentId, courseId, year, month])
+  @@index([month])
   @@map("incomes_payments")
 }
 

@@ -187,6 +187,26 @@ type GroupCount {
   students: Int!
 }
 
+type IncomesPayments {
+  amount: Float!
+  course: Course
+  courseId: Int!
+  id: Int!
+  month: Int!
+  payedAt: DateTime!
+  student: Student
+  studentId: Int!
+  year: Int!
+}
+
+input IncomesPaymentsInput {
+  amount: Float!
+  courseId: Int!
+  month: Int!
+  studentId: Int!
+  year: Int!
+}
+
 type Instructor {
   _count: InstructorCount
   courses: [InstructorCourse!]
@@ -227,8 +247,10 @@ type Mutation {
   addGrade(inputs: CreateGradeInputs!): Grade!
   addGroup(inputs: CreateGroupInputs!): Group!
   addGroupSession(inputs: CreateCalendarSession!): CalendarSession!
+  addIncomesPayment(inputs: IncomesPaymentsInput!): Payments!
   addInstructor(inputs: CreateInstructorInputs!): Instructor!
   addInstructorToCourse(inputs: AddInstructorCourseInputs!): InstructorCourse!
+  addOutGoingPayment(inputs: OutGoingPaymentsInput!): Payments!
   addParent(inputs: CreateParentInput!): Parent!
   addSale(name: String!): Sale!
   addStaffMember(inputs: AddStaffInput!): Staff!
@@ -263,11 +285,39 @@ type Mutation {
   updateUserInformation(inputs: UpdateUserInputs!, userId: Int!): User!
 }
 
+input OutGoingPaymentsInput {
+  amount: Float!
+  instructorId: Int
+  month: Int!
+  staffId: Int
+  year: Int!
+}
+
+type OutgoingPayments {
+  amount: Float!
+  id: Int!
+  instructor: Instructor
+  instructorId: Int!
+  month: Int!
+  payedAt: DateTime!
+  staff: Staff
+  staffId: Int!
+  year: Int!
+}
+
 type Parent {
   id: Int!
   students: [Student!]
   user: User
   userId: Int!
+}
+
+type Payments {
+  id: Int!
+  incomesPayment: IncomesPayments
+  incomesPaymentId: Int
+  outgoingPayment: OutgoingPayments
+  outgoingPaymentId: Int
 }
 
 type Query {
