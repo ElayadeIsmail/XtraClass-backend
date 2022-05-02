@@ -14,6 +14,7 @@ import { PaymentsModule } from './models/payments/payments.module';
 import { SalesModule } from './models/sales/sales.module';
 import { SpecializationsModule } from './models/specializations/specializations.module';
 import { StaffModule } from './models/staff/staff.module';
+import { StatisticsModule } from './models/statistics/statistics.module';
 import { StudentsCoursesModule } from './models/students-courses/students-courses.module';
 import { StudentsGroupsModule } from './models/students-groups/students-groups.module';
 import { StudentsModule } from './models/students/students.module';
@@ -44,6 +45,7 @@ import { UsersModule } from './models/users/users.module';
     CalendarModule,
     PaymentsModule,
     SalesModule,
+    StatisticsModule,
   ],
 })
 export class AppModule {}
