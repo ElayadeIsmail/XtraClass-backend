@@ -1,6 +1,7 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IncomesPaymentsInput } from './inputs/incomes-payments-inputs';
 import { OutGoingPaymentsInput } from './inputs/outgoing-payments-inputs';
+import { PaymentsFilterInput } from './inputs/payments-filter-inputs';
 import { Payments } from './object-types/Payments';
 import { PaymentsService } from './payments.service';
 
@@ -19,5 +20,9 @@ export class PaymentsResolver {
     @Args('inputs') inputs: OutGoingPaymentsInput,
   ): Promise<Payments> {
     return this.paymentsService.addOutGoingPayments(inputs);
+  }
+  @Query(() => [Payments])
+  async payments(@Args('args') args: PaymentsFilterInput): Promise<Payments[]> {
+    return this.paymentsService.payments(args);
   }
 }

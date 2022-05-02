@@ -1,6 +1,15 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { IncomesPayments } from './IncomesPayments';
 import { OutgoingPayments } from './OutgoingPayments';
+
+export enum PaymentType {
+  OutGoing,
+  InComing,
+}
+
+registerEnumType(PaymentType, {
+  name: 'PaymentType',
+});
 
 @ObjectType()
 export class Payments {

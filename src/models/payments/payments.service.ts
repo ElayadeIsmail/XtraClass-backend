@@ -1,8 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { IncomesPaymentsInput } from './inputs/incomes-payments-inputs';
 import { OutGoingPaymentsInput } from './inputs/outgoing-payments-inputs';
-import { Payments } from './object-types/Payments';
+import { PaymentsFilterInput } from './inputs/payments-filter-inputs';
+import { Payments, PaymentType } from './object-types/Payments';
 
 @Injectable()
 export class PaymentsService {
@@ -113,5 +115,54 @@ export class PaymentsService {
         outgoingPayment: true,
       },
     });
+  }
+
+  async payments(inputs: PaymentsFilterInput): Promise<Payments[]> {
+    const { type, month, year } = inputs;
+    let args: Prisma.PaymentsFindManyArgs = {};
+    if (type === PaymentType.InComing) {
+      args = {
+        where: {
+          outgoingPaymentId: null,
+          incomesPaymentId: {
+            not: null,
+          },
+          incomesPayment: {
+            month,
+            year,
+          },
+        },
+        include: {
+          incomesPayment: {
+            include: {
+              course: true,
+              student: true,
+            },
+          },
+        },
+      };
+    } else {
+      args = {
+        where: {
+          incomesPaymentId: null,
+          outgoingPaymentId: {
+            not: null,
+          },
+          outgoingPayment: {
+            month,
+            year,
+          },
+        },
+        include: {
+          outgoingPayment: {
+            include: {
+              instructor: true,
+              staff: true,
+            },
+          },
+        },
+      };
+    }
+    return this.prisma.payments.findMany(args);
   }
 }

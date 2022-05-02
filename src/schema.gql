@@ -312,12 +312,23 @@ type Parent {
   userId: Int!
 }
 
+enum PaymentType {
+  InComing
+  OutGoing
+}
+
 type Payments {
   id: Int!
   incomesPayment: IncomesPayments
   incomesPaymentId: Int
   outgoingPayment: OutgoingPayments
   outgoingPaymentId: Int
+}
+
+input PaymentsFilterInput {
+  month: Int = 4
+  type: PaymentType!
+  year: Int = 2022
 }
 
 type Query {
@@ -331,6 +342,7 @@ type Query {
   instructor(id: Int!): Instructor!
   instructors(args: InstructorFilterInputs!): [Instructor!]!
   levels(gradeId: Int!): [Level!]!
+  payments(args: PaymentsFilterInput!): [Payments!]!
   sale(id: Int!): Sale!
   sales: [Sale!]!
   specialization(id: Int!): Specialization!
